@@ -17,7 +17,7 @@ export class PetList extends Component {
   }
 
   /**
-   * Load pets from API or localStorage
+   * Load pets from Shopify metaobjects
    */
   async loadPets() {
     this.showLoading();
@@ -32,8 +32,10 @@ export class PetList extends Component {
       return;
     }
 
+    console.log('Loading pets for customer:', customerId);
+
     try {
-      // Try to fetch from API
+      // Fetch from Shopify metaobjects via app endpoint
       const response = await fetch(`/apps/pet-profile/list?customer_id=${customerId}`, {
         method: 'GET',
         headers: {
@@ -45,21 +47,49 @@ export class PetList extends Component {
       if (response.ok) {
         const data = await response.json();
         this.pets = data.pets || [];
-        console.log('Loaded pets from API:', this.pets);
+        console.log('✅ Loaded', this.pets.length, 'pets from Shopify metaobjects');
+
+        // Update localStorage cache
+        this.updateLocalStorageCache(this.pets, customerId);
+
+        this.renderPets();
+        return;
       } else {
         throw new Error('API endpoint not available');
       }
     } catch (error) {
-      console.warn('API endpoint not available, loading from localStorage');
+      console.warn('⚠️ API endpoint not available, loading from localStorage cache');
+
       // Fallback to localStorage - filter by customer ID
       const allPets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
       this.pets = allPets.filter(pet =>
         !pet.customer_id || pet.customer_id === customerId
       );
-      console.log('Loaded pets from localStorage:', this.pets);
+
+      console.log('📦 Loaded', this.pets.length, 'pets from localStorage cache');
+      console.log('💡 These pets may not be synced. Set up the API endpoint for cross-device sync.');
     }
 
     this.renderPets();
+  }
+
+  /**
+   * Update localStorage cache with pets from API
+   * @param {Array} pets
+   * @param {string} customerId
+   */
+  updateLocalStorageCache(pets, customerId) {
+    // Get all pets from localStorage
+    const allPets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
+
+    // Remove this customer's old pets
+    const otherPets = allPets.filter(p => p.customer_id !== customerId);
+
+    // Add the fresh pets from API
+    const updatedPets = [...otherPets, ...pets];
+
+    localStorage.setItem('customer_pets', JSON.stringify(updatedPets));
+    console.log('💾 Updated localStorage cache with', pets.length, 'pets');
   }
 
   /**
@@ -353,40 +383,66 @@ export class PetList extends Component {
     if (!this.petToDelete) return;
 
     const petId = this.petToDelete.id;
+    const petName = this.petToDelete.name;
     this.hideDeleteModal();
 
+    console.log('Deleting pet:', petId);
+
     try {
-      // Try to delete via API
-      const response = await fetch(`/apps/pet-profile/${petId}`, {
+      // Delete from Shopify metaobject via app endpoint
+      const response = await fetch(`/apps/pet-profile/delete/${petId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }
       });
 
-      if (!response.ok) {
+      if (response.ok) {
+        console.log('✅ Pet deleted from Shopify metaobject:', petId);
+
+        // Also remove from localStorage cache
+        this.deletePetFromLocalStorage(petId);
+
+        // Remove from local array and re-render
+        this.pets = this.pets.filter(p => String(p.id) !== String(petId));
+        this.renderPets();
+
+        this.showDeleteSuccess(petName);
+        return;
+      } else {
         throw new Error('API endpoint not available');
       }
     } catch (error) {
-      console.warn('API endpoint not available, deleting from localStorage');
-      // Fallback: delete from localStorage
-      const pets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
-      const filteredPets = pets.filter(p => String(p.id) !== String(petId));
-      localStorage.setItem('customer_pets', JSON.stringify(filteredPets));
+      console.warn('⚠️ API endpoint not available, deleting from localStorage only');
+      console.warn('⚠️ This pet may still exist in Shopify metaobjects');
+
+      // Fallback: delete from localStorage only
+      this.deletePetFromLocalStorage(petId);
+
+      // Remove from local array and re-render
+      this.pets = this.pets.filter(p => String(p.id) !== String(petId));
+      this.renderPets();
+
+      this.showDeleteSuccess(petName);
     }
+  }
 
-    // Remove from local array and re-render
-    this.pets = this.pets.filter(p => String(p.id) !== String(petId));
-    this.renderPets();
-
-    // Show success message (optional)
-    this.showDeleteSuccess();
+  /**
+   * Delete pet from localStorage cache
+   * @param {string} petId
+   */
+  deletePetFromLocalStorage(petId) {
+    const pets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
+    const filteredPets = pets.filter(p => String(p.id) !== String(petId));
+    localStorage.setItem('customer_pets', JSON.stringify(filteredPets));
+    console.log('💾 Removed pet from localStorage cache');
   }
 
   /**
    * Show delete success message
+   * @param {string} petName
    */
-  showDeleteSuccess() {
+  showDeleteSuccess(petName) {
     // Create a temporary success message
     const message = document.createElement('div');
     message.className = 'pet-list__success-toast';
@@ -402,7 +458,7 @@ export class PetList extends Component {
       z-index: 2000;
       animation: slideIn 0.3s ease;
     `;
-    message.textContent = 'Pet profile deleted successfully';
+    message.textContent = `${petName}'s profile deleted successfully`;
     document.body.appendChild(message);
 
     setTimeout(() => {

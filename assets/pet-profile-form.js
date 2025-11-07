@@ -195,7 +195,7 @@ export class PetProfileForm extends Component {
   }
 
   /**
-   * Submit pet data to Shopify
+   * Submit pet data to Shopify metaobject
    * @param {Object} petData
    */
   async submitPetData(petData) {
@@ -207,9 +207,11 @@ export class PetProfileForm extends Component {
       throw new Error('You must be logged in to create a pet profile.');
     }
 
-    // Try to submit via API endpoint
+    console.log('Submitting pet data for customer:', customerId);
+
+    // Submit to Shopify app endpoint to create metaobject
     try {
-      const response = await fetch('/apps/pet-profile/submit', {
+      const response = await fetch('/apps/pet-profile/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,29 +225,51 @@ export class PetProfileForm extends Component {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Pet profile saved via API:', result);
+        console.log('✅ Pet profile saved to Shopify metaobject:', result);
+
+        // Also save to localStorage as a cache
+        this.savePetToLocalStorage(petData, result.metaobject_id, customerId);
+
         return result;
       } else {
-        throw new Error('API endpoint returned error');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to save pet profile');
       }
     } catch (error) {
-      // Fallback: Store in localStorage for development
-      console.warn('API endpoint not available, storing in localStorage');
-      console.log('Pet data:', petData);
+      console.error('❌ Error calling API:', error);
 
-      const pets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
-      const newPet = {
-        ...petData,
-        id: Date.now(),
-        customer_id: customerId,
-        created_at: new Date().toISOString()
-      };
-      pets.push(newPet);
-      localStorage.setItem('customer_pets', JSON.stringify(pets));
+      // Fallback: Store in localStorage only (development mode)
+      console.warn('⚠️ API endpoint not available. Saving to localStorage only.');
+      console.warn('⚠️ This pet will NOT sync across devices until API is set up.');
 
-      console.log('Pet saved to localStorage:', newPet);
-      return { success: true, pet: newPet };
+      const newPet = this.savePetToLocalStorage(petData, `temp-${Date.now()}`, customerId);
+
+      // Show warning to user
+      console.log('💡 To sync pets across devices, set up the Shopify app endpoint.');
+
+      return { success: true, pet: newPet, local_only: true };
     }
+  }
+
+  /**
+   * Save pet to localStorage as cache/fallback
+   * @param {Object} petData
+   * @param {string} metaobjectId
+   * @param {string} customerId
+   * @returns {Object} The saved pet object
+   */
+  savePetToLocalStorage(petData, metaobjectId, customerId) {
+    const pets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
+    const newPet = {
+      ...petData,
+      id: metaobjectId,
+      customer_id: customerId,
+      created_at: new Date().toISOString()
+    };
+    pets.push(newPet);
+    localStorage.setItem('customer_pets', JSON.stringify(pets));
+    console.log('💾 Pet cached to localStorage:', newPet);
+    return newPet;
   }
 
   /**
