@@ -87,7 +87,7 @@ Create a custom app with access to the Customer API and Metaobjects API:
 
 ```javascript
 // Example endpoint: /apps/pet-profile/submit
-app.post('/apps/pet-profile/submit', async (req, res) => {
+app.post('/apps/pet-profile-manager-2/submit', async (req, res) => {
   const { customer_id, pet_data } = req.body;
 
   try {

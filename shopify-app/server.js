@@ -49,9 +49,9 @@ const shopify = new Shopify.Clients.Rest(
 
 /**
  * Create a new pet profile metaobject
- * POST /apps/pet-profile/create
+ * POST /apps/pet-profile-manager-2/create
  */
-app.post('/apps/pet-profile/create', async (req, res) => {
+app.post('/apps/pet-profile-manager-2/create', async (req, res) => {
   try {
     const { customer_id, pet_data } = req.body;
 
@@ -127,9 +127,9 @@ app.post('/apps/pet-profile/create', async (req, res) => {
 
 /**
  * List all pets for a customer
- * GET /apps/pet-profile/list?customer_id=xxx
+ * GET /apps/pet-profile-manager-2/list?customer_id=xxx
  */
-app.get('/apps/pet-profile/list', async (req, res) => {
+app.get('/apps/pet-profile-manager-2/list', async (req, res) => {
   try {
     const { customer_id } = req.query;
 
@@ -196,9 +196,9 @@ app.get('/apps/pet-profile/list', async (req, res) => {
 
 /**
  * Delete a pet profile
- * DELETE /apps/pet-profile/delete/:petId
+ * DELETE /apps/pet-profile-manager-2/delete/:petId
  */
-app.delete('/apps/pet-profile/delete/:petId', async (req, res) => {
+app.delete('/apps/pet-profile-manager-2/delete/:petId', async (req, res) => {
   try {
     const { petId } = req.params;
 

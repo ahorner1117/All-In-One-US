@@ -319,7 +319,7 @@ Use pet data to:
 Access pet data in subscription logic:
 ```javascript
 // Get customer's pets
-const pets = await fetch('/apps/pet-profile/list').then(r => r.json());
+const pets = await fetch('/apps/pet-profile-manager-2/list').then(r => r.json());
 
 // Filter products by pet needs
 const suitableProducts = products.filter(p => {

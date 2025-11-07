@@ -36,7 +36,7 @@ export class PetList extends Component {
 
     try {
       // Fetch from Shopify metaobjects via app endpoint
-      const response = await fetch(`/apps/pet-profile/list?customer_id=${customerId}`, {
+      const response = await fetch(`/apps/pet-profile-manager-2/list?customer_id=${customerId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -390,7 +390,7 @@ export class PetList extends Component {
 
     try {
       // Delete from Shopify metaobject via app endpoint
-      const response = await fetch(`/apps/pet-profile/delete/${petId}`, {
+      const response = await fetch(`/apps/pet-profile-manager-2/delete/${petId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

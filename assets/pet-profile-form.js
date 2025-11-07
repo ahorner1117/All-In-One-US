@@ -211,7 +211,7 @@ export class PetProfileForm extends Component {
 
     // Submit to Shopify app endpoint to create metaobject
     try {
-      const response = await fetch('/apps/pet-profile/create', {
+      const response = await fetch('/apps/pet-profile-manager-2/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
