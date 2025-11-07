@@ -1,0 +1,91 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "title": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Tell Us About Your Furry Friend!</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "h1",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "description": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We're excited to create a personalized box just for your pet! Tell us a bit about them so we can make sure everything is perfect.</p>",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "center",
+            "type_preset": "body",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 24,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "description"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "gap": 16,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "pet-form": {
+      "type": "pet-profile-form",
+      "settings": {
+        "name_question": "What is your pet's name?",
+        "name_help": "We'll make sure all their goodies are labeled just for them!",
+        "pet_name_placeholder": "your pet",
+        "birthday_question": "When's their birthday?",
+        "birthday_help": "We love sending birthday surprises! 🎉",
+        "breed_question": "What breed are they?",
+        "weight_question": "How much does [pet_name] weigh?",
+        "allergies_question": "Does [pet_name] have any protein allergies?",
+        "boost_question": "What kind of boost does [pet_name] need most?",
+        "submit_button_text": "Create Pet Profile",
+        "success_message": "Pet profile created successfully! 🎉",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 20,
+        "padding-block-end": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "pet-form"
+  ]
+}

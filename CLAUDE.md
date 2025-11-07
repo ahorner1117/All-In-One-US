@@ -148,3 +148,34 @@ Defined in `global.d.ts`:
 - Theme settings are in `config/settings_schema.json`
 - Color schemes, typography, and global options configured there
 - Changes sync through theme editor in admin
+
+## Custom Features
+
+### Pet Profile Form
+
+This theme includes a custom **Pet Profile Form** section (`sections/pet-profile-form.liquid`) designed for subscription-based pet box stores.
+
+**Features:**
+- Conversational, friendly copy for better UX
+- Dynamic pet name that updates questions in real-time
+- Visual selectors for weight categories (Tiny but mighty, Perfect medium, Large and in charge)
+- Protein allergy selector with icons (beef, chicken, lamb, turkey)
+- Health boost options (Joint support, Gut health, Pre + pro biotic)
+- Automatic dog/cat toggle that shows appropriate weight options
+
+**Files:**
+- `sections/pet-profile-form.liquid` - Form section with schema and styles
+- `assets/pet-profile-form.js` - Web component handling form logic and submission
+- `PET_FORM_SETUP.md` - Complete setup and integration guide
+
+**Usage:**
+1. Add the "Pet Profile Form" section to any page via theme editor
+2. Customize questions and copy in section settings
+3. Set up backend API endpoint for metaobject creation (see PET_FORM_SETUP.md)
+4. Form data should be saved to customer metaobjects for subscription personalization
+
+**Integration Notes:**
+- Requires customer to be logged in
+- Submits to `/apps/pet-profile/submit` endpoint (requires custom app or Shopify Functions)
+- Falls back to localStorage during development if API endpoint not available
+- Form data structure: `{ name, type, birthday, breed, weight, allergies[], healthBoost }`

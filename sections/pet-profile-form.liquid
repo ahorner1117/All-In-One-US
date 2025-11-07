@@ -1,0 +1,532 @@
+
+<script
+  src="{{ 'pet-profile-form.js' | asset_url }}"
+  type="module"
+  defer
+></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section page-width-content color-{{ section.settings.color_scheme }}">
+  <div
+    class="pet-profile-form-wrapper spacing-style"
+    style="
+      {% render 'spacing-style', settings: section.settings %}
+    "
+  >
+    <pet-profile-form
+      class="pet-profile-form"
+      section-id="{{ section.id }}"
+      {% if customer %}
+        customer-logged-in="true"
+        customer-id="{{ customer.id }}"
+      {% else %}
+        customer-logged-in="false"
+      {% endif %}
+    >
+      <div class="pet-profile-form__success" ref="successMessage" hidden>
+        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+        <span>{{ section.settings.success_message }}</span>
+      </div>
+
+      <div class="pet-profile-form__error" ref="errorMessage" hidden>
+        {{- 'icon-error.svg' | inline_asset_content -}}
+        <span ref="errorText"></span>
+      </div>
+
+      <form class="pet-profile-form__form" ref="form">
+        <!-- Pet Name -->
+        <div class="form-field">
+          <label for="pet-name" class="form-field__label">
+            {{ section.settings.name_question }}
+          </label>
+          <p class="form-field__help">{{ section.settings.name_help }}</p>
+          <input
+            type="text"
+            id="pet-name"
+            name="pet_name"
+            class="form-field__input"
+            required
+            placeholder="Enter your pet's name"
+          >
+        </div>
+
+        <!-- Pet Type -->
+        <div class="form-field">
+          <label class="form-field__label">
+            Is {{ section.settings.pet_name_placeholder }} a dog or cat?
+          </label>
+          <div class="form-field__radio-group">
+            <label class="radio-card">
+              <input type="radio" name="pet_type" value="dog" required>
+              <span class="radio-card__content">
+                <span class="radio-card__icon">🐕</span>
+                <span class="radio-card__label">Dog</span>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="pet_type" value="cat" required>
+              <span class="radio-card__content">
+                <span class="radio-card__icon">🐱</span>
+                <span class="radio-card__label">Cat</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Birthday -->
+        <div class="form-field">
+          <label for="pet-birthday" class="form-field__label">
+            {{ section.settings.birthday_question }}
+          </label>
+          <p class="form-field__help">{{ section.settings.birthday_help }}</p>
+          <input
+            type="date"
+            id="pet-birthday"
+            name="pet_birthday"
+            class="form-field__input"
+          >
+        </div>
+
+        <!-- Breed -->
+        <div class="form-field">
+          <label for="pet-breed" class="form-field__label">
+            {{ section.settings.breed_question }}
+          </label>
+          <input
+            type="text"
+            id="pet-breed"
+            name="pet_breed"
+            class="form-field__input"
+            placeholder="e.g., Golden Retriever, Tabby, etc."
+          >
+        </div>
+
+        <!-- Weight (conditional based on pet type) -->
+        <div class="form-field" ref="weightField">
+          <label class="form-field__label" ref="weightLabel">
+            {{ section.settings.weight_question }}
+          </label>
+          <div class="form-field__radio-group form-field__radio-group--weight" ref="dogWeightOptions">
+            <label class="radio-card radio-card--weight">
+              <input type="radio" name="pet_weight" value="tiny" required>
+              <span class="radio-card__content">
+                <span class="radio-card__title">Tiny but mighty</span>
+                <span class="radio-card__subtitle">&lt;10lbs</span>
+              </span>
+            </label>
+            <label class="radio-card radio-card--weight">
+              <input type="radio" name="pet_weight" value="medium" required>
+              <span class="radio-card__content">
+                <span class="radio-card__title">Perfect medium</span>
+                <span class="radio-card__subtitle">25-50lbs</span>
+              </span>
+            </label>
+            <label class="radio-card radio-card--weight">
+              <input type="radio" name="pet_weight" value="large" required>
+              <span class="radio-card__content">
+                <span class="radio-card__title">Large and in charge</span>
+                <span class="radio-card__subtitle">50+lbs</span>
+              </span>
+            </label>
+          </div>
+          <div class="form-field__radio-group form-field__radio-group--weight" ref="catWeightOptions" hidden>
+            <label class="radio-card radio-card--weight">
+              <input type="radio" name="pet_weight" value="cat" required>
+              <span class="radio-card__content">
+                <span class="radio-card__title">One size fits all</span>
+                <span class="radio-card__subtitle">Standard cat size</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Allergies -->
+        <div class="form-field">
+          <label class="form-field__label" ref="allergiesLabel">
+            {{ section.settings.allergies_question }}
+          </label>
+          <p class="form-field__help">Select all that apply</p>
+          <div class="form-field__checkbox-group">
+            <label class="checkbox-card">
+              <input type="checkbox" name="allergies" value="beef">
+              <span class="checkbox-card__content">
+                <span class="checkbox-card__icon">🥩</span>
+                <span class="checkbox-card__label">Beef</span>
+              </span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="allergies" value="chicken">
+              <span class="checkbox-card__content">
+                <span class="checkbox-card__icon">🍗</span>
+                <span class="checkbox-card__label">Chicken</span>
+              </span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="allergies" value="lamb">
+              <span class="checkbox-card__content">
+                <span class="checkbox-card__icon">🐑</span>
+                <span class="checkbox-card__label">Lamb</span>
+              </span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="allergies" value="turkey">
+              <span class="checkbox-card__content">
+                <span class="checkbox-card__icon">🦃</span>
+                <span class="checkbox-card__label">Turkey</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Health Boost -->
+        <div class="form-field">
+          <label class="form-field__label" ref="boostLabel">
+            {{ section.settings.boost_question }}
+          </label>
+          <div class="form-field__radio-group form-field__radio-group--boost">
+            <label class="radio-card radio-card--boost">
+              <input type="radio" name="health_boost" value="joint_support" required>
+              <span class="radio-card__content">
+                <span class="radio-card__icon">🦴</span>
+                <span class="radio-card__label">Joint support</span>
+              </span>
+            </label>
+            <label class="radio-card radio-card--boost">
+              <input type="radio" name="health_boost" value="gut_health" required>
+              <span class="radio-card__content">
+                <span class="radio-card__icon">🌟</span>
+                <span class="radio-card__label">Gut health</span>
+              </span>
+            </label>
+            <label class="radio-card radio-card--boost">
+              <input type="radio" name="health_boost" value="probiotic" required>
+              <span class="radio-card__content">
+                <span class="radio-card__icon">💚</span>
+                <span class="radio-card__label">Pre + pro biotic</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="button pet-profile-form__submit" ref="submitButton">
+          {{ section.settings.submit_button_text }}
+        </button>
+      </form>
+    </pet-profile-form>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Pet Profile Form",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form Questions"
+    },
+    {
+      "type": "text",
+      "id": "name_question",
+      "label": "Pet Name Question",
+      "default": "What is your pet's name?"
+    },
+    {
+      "type": "text",
+      "id": "name_help",
+      "label": "Pet Name Help Text",
+      "default": "We'll make sure all their goodies are labeled just for them!"
+    },
+    {
+      "type": "text",
+      "id": "pet_name_placeholder",
+      "label": "Pet Name Placeholder",
+      "default": "your pet",
+      "info": "Used in dynamic questions (e.g., 'How much does [placeholder] weigh?')"
+    },
+    {
+      "type": "text",
+      "id": "birthday_question",
+      "label": "Birthday Question",
+      "default": "When's their birthday?"
+    },
+    {
+      "type": "text",
+      "id": "birthday_help",
+      "label": "Birthday Help Text",
+      "default": "We love sending birthday surprises! 🎉"
+    },
+    {
+      "type": "text",
+      "id": "breed_question",
+      "label": "Breed Question",
+      "default": "What breed are they?"
+    },
+    {
+      "type": "text",
+      "id": "weight_question",
+      "label": "Weight Question",
+      "default": "How much does [pet_name] weigh?",
+      "info": "[pet_name] will be replaced with the pet's name"
+    },
+    {
+      "type": "text",
+      "id": "allergies_question",
+      "label": "Allergies Question",
+      "default": "Does [pet_name] have any protein allergies?",
+      "info": "[pet_name] will be replaced with the pet's name"
+    },
+    {
+      "type": "text",
+      "id": "boost_question",
+      "label": "Health Boost Question",
+      "default": "What kind of boost does [pet_name] need most?",
+      "info": "[pet_name] will be replaced with the pet's name"
+    },
+    {
+      "type": "header",
+      "content": "Form Settings"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_text",
+      "label": "Submit Button Text",
+      "default": "Create Pet Profile"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Pet profile created successfully! 🎉"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pet Profile Form",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .pet-profile-form-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .pet-profile-form__success,
+  .pet-profile-form__error {
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--padding-lg);
+    border-radius: var(--style-border-radius-inputs);
+    margin-bottom: var(--gap-lg);
+  }
+
+  .pet-profile-form__success[hidden],
+  .pet-profile-form__error[hidden] {
+    display: none !important;
+  }
+
+  .pet-profile-form__success:not([hidden]) {
+    display: flex;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .pet-profile-form__error:not([hidden]) {
+    display: flex;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .pet-profile-form__success svg,
+  .pet-profile-form__error svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .pet-profile-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .form-field__label {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .form-field__help {
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .form-field__input {
+    width: 100%;
+    padding: var(--padding-lg) var(--padding-xl);
+    border-radius: var(--style-border-radius-inputs);
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
+    font-size: var(--font-size-base);
+  }
+
+  .form-field__input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .form-field__radio-group {
+    display: grid;
+    gap: var(--gap-md);
+  }
+
+  .form-field__radio-group--weight,
+  .form-field__radio-group--boost {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  @media screen and (max-width: 749px) {
+    .form-field__radio-group {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .radio-card,
+  .checkbox-card {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .radio-card input[type="radio"],
+  .checkbox-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .radio-card__content,
+  .checkbox-card__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-sm);
+    padding: var(--padding-xl);
+    border-radius: var(--style-border-radius-inputs);
+    border: 2px solid var(--color-input-border);
+    background-color: var(--color-input-background);
+    transition: all 0.2s ease;
+    min-height: 100px;
+  }
+
+  .radio-card--weight .radio-card__content,
+  .radio-card--boost .radio-card__content {
+    min-height: 120px;
+  }
+
+  .radio-card input[type="radio"]:checked ~ .radio-card__content,
+  .checkbox-card input[type="checkbox"]:checked ~ .checkbox-card__content {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .radio-card:hover .radio-card__content,
+  .checkbox-card:hover .checkbox-card__content {
+    border-color: var(--color-primary);
+  }
+
+  .radio-card__icon,
+  .checkbox-card__icon {
+    font-size: 2rem;
+  }
+
+  .radio-card__label,
+  .checkbox-card__label {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .radio-card__title {
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    text-align: center;
+  }
+
+  .radio-card__subtitle {
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  .form-field__checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--gap-md);
+  }
+
+  @media screen and (max-width: 749px) {
+    .form-field__checkbox-group {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .pet-profile-form__submit {
+    width: 100%;
+    padding: var(--padding-xl);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-top: var(--gap-md);
+  }
+
+  .pet-profile-form__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+{% endstylesheet %}

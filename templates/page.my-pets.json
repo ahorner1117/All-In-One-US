@@ -1,0 +1,86 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "title": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Your Pets</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "h1",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "description": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Manage your pet profiles and keep their information up to date.</p>",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "center",
+            "type_preset": "body",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 24,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "description"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "gap": 16,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "pet-list": {
+      "type": "pet-list",
+      "settings": {
+        "title": "Your Pets",
+        "show_add_button": true,
+        "add_button_text": "Add Another Pet",
+        "add_pet_url": "/pages/add-pet",
+        "empty_message": "You haven't added any pets yet. Let's get started!",
+        "empty_button_text": "Add Your First Pet",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 20,
+        "padding-block-end": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "pet-list"
+  ]
+}

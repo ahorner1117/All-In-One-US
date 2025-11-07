@@ -1,0 +1,389 @@
+
+<script
+  src="{{ 'pet-list.js' | asset_url }}"
+  type="module"
+  defer
+></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section page-width-content color-{{ section.settings.color_scheme }}">
+  <div
+    class="pet-list-wrapper spacing-style"
+    style="
+      {% render 'spacing-style', settings: section.settings %}
+    "
+  >
+    <pet-list
+      class="pet-list"
+      section-id="{{ section.id }}"
+      {% if customer %}
+        customer-logged-in="true"
+        customer-id="{{ customer.id }}"
+      {% else %}
+        customer-logged-in="false"
+      {% endif %}
+    >
+      <div class="pet-list__header">
+        <h2 class="pet-list__title">{{ section.settings.title }}</h2>
+        {% if section.settings.show_add_button %}
+          <a href="{{ section.settings.add_pet_url }}" class="button button--secondary">
+            {{ section.settings.add_button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="pet-list__empty" ref="emptyState">
+        <div class="pet-list__empty-icon">🐾</div>
+        <p class="pet-list__empty-text">{{ section.settings.empty_message }}</p>
+        {% if section.settings.show_add_button and section.settings.add_pet_url != blank %}
+          <a href="{{ section.settings.add_pet_url }}" class="button">
+            {{ section.settings.empty_button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="pet-list__loading" ref="loadingState" hidden>
+        <div class="pet-list__spinner"></div>
+        <p>Loading your pets...</p>
+      </div>
+
+      <div class="pet-list__grid" ref="petGrid"></div>
+    </pet-list>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Pet List",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Your Pets"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_button",
+      "label": "Show Add Pet Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "add_button_text",
+      "label": "Add Button Text",
+      "default": "Add Another Pet"
+    },
+    {
+      "type": "url",
+      "id": "add_pet_url",
+      "label": "Add Pet Page URL",
+      "info": "Link to your pet profile form page"
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "Empty State Message",
+      "default": "You haven't added any pets yet. Let's get started!"
+    },
+    {
+      "type": "text",
+      "id": "empty_button_text",
+      "label": "Empty State Button Text",
+      "default": "Add Your First Pet"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pet List",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .pet-list-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .pet-list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--gap-xl);
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+  }
+
+  .pet-list__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .pet-list__empty,
+  .pet-list__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-xl) var(--padding-lg);
+    text-align: center;
+    min-height: 300px;
+  }
+
+  .pet-list__empty[hidden],
+  .pet-list__loading[hidden] {
+    display: none !important;
+  }
+
+  .pet-list__empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--gap-md);
+    opacity: 0.5;
+  }
+
+  .pet-list__empty-text {
+    font-size: var(--font-size-lg);
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .pet-list__spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--color-foreground);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--gap-md);
+    opacity: 0.3;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .pet-list__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--gap-lg);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pet-list__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pet-card {
+    background-color: var(--color-background);
+    border: 2px solid var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+    padding: var(--padding-xl);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .pet-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .pet-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: var(--gap-md);
+  }
+
+  .pet-card__name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+  }
+
+  .pet-card__type-icon {
+    font-size: 1.5rem;
+  }
+
+  .pet-card__actions {
+    display: flex;
+    gap: var(--gap-xs);
+  }
+
+  .pet-card__action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--padding-xs);
+    font-size: 1.2rem;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .pet-card__action:hover {
+    opacity: 1;
+  }
+
+  .pet-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .pet-card__info-row {
+    display: flex;
+    gap: var(--gap-xs);
+    font-size: var(--font-size-sm);
+  }
+
+  .pet-card__info-label {
+    font-weight: 600;
+    color: var(--color-foreground);
+    opacity: 0.7;
+  }
+
+  .pet-card__info-value {
+    color: var(--color-foreground);
+  }
+
+  .pet-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-xs);
+    margin-top: var(--gap-sm);
+  }
+
+  .pet-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    padding: var(--padding-xs) var(--padding-sm);
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+  }
+
+  .pet-card__badge--allergy {
+    background-color: #dc3545;
+  }
+
+  .pet-card__badge--boost {
+    background-color: #28a745;
+  }
+
+  /* Delete confirmation modal */
+  .pet-delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--padding-lg);
+  }
+
+  .pet-delete-modal[hidden] {
+    display: none !important;
+  }
+
+  .pet-delete-modal__content {
+    background-color: var(--color-background);
+    border-radius: var(--style-border-radius-inputs);
+    padding: var(--padding-xl);
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .pet-delete-modal__title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--gap-md);
+  }
+
+  .pet-delete-modal__text {
+    margin-bottom: var(--gap-lg);
+  }
+
+  .pet-delete-modal__actions {
+    display: flex;
+    gap: var(--gap-md);
+    justify-content: flex-end;
+  }
+
+  .pet-delete-modal__button {
+    padding: var(--padding-md) var(--padding-lg);
+    border: none;
+    border-radius: var(--style-border-radius-inputs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .pet-delete-modal__button--cancel {
+    background-color: var(--color-input-background);
+    color: var(--color-foreground);
+  }
+
+  .pet-delete-modal__button--delete {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .pet-delete-modal__button:hover {
+    opacity: 0.8;
+  }
+{% endstylesheet %}
