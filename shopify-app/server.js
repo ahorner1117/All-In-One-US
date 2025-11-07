@@ -6,10 +6,39 @@
  */
 
 const express = require('express');
+const cors = require('cors');
 const { Shopify } = require('@shopify/shopify-api');
 require('dotenv').config();
 
 const app = express();
+
+// Configure CORS to allow requests from your Shopify store
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests from Shopify stores (*.myshopify.com)
+    const allowedOrigins = [
+      /\.myshopify\.com$/,
+      /^https:\/\/[\w-]+\.myshopify\.com$/
+    ];
+    
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin matches any allowed pattern
+    const isAllowed = allowedOrigins.some(pattern => pattern.test(origin));
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Shopify API configuration
