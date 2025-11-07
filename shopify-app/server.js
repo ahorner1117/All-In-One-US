@@ -7,7 +7,6 @@
 
 const express = require('express');
 const cors = require('cors');
-const { Shopify } = require('@shopify/shopify-api');
 require('dotenv').config();
 
 const app = express();
@@ -20,13 +19,13 @@ const corsOptions = {
       /\.myshopify\.com$/,
       /^https:\/\/[\w-]+\.myshopify\.com$/
     ];
-    
+
     // Allow requests with no origin (like mobile apps or Postman)
     if (!origin) return callback(null, true);
-    
+
     // Check if origin matches any allowed pattern
     const isAllowed = allowedOrigins.some(pattern => pattern.test(origin));
-    
+
     if (isAllowed) {
       callback(null, true);
     } else {
@@ -42,16 +41,39 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Shopify API configuration
-const shopify = new Shopify.Clients.Rest(
-  process.env.SHOPIFY_SHOP_DOMAIN,
-  process.env.SHOPIFY_ADMIN_ACCESS_TOKEN
-);
+const SHOPIFY_SHOP_DOMAIN = process.env.SHOPIFY_SHOP_DOMAIN;
+const SHOPIFY_ACCESS_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+
+// Helper function to make GraphQL requests
+async function shopifyGraphQL(query, variables = {}) {
+  const response = await fetch(`https://${SHOPIFY_SHOP_DOMAIN}/admin/api/2024-10/graphql.json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GraphQL request failed: ${response.status} ${errorText}`);
+  }
+
+  const result = await response.json();
+
+  if (result.errors) {
+    throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+  }
+
+  return result;
+}
 
 /**
  * Create a new pet profile metaobject
- * POST /apps/pet-profile-manager-2/create
+ * POST /apps/pet-profile/create
  */
-app.post('/apps/pet-profile-manager-2/create', async (req, res) => {
+app.post('/apps/pet-profile/create', async (req, res) => {
   try {
     const { customer_id, pet_data } = req.body;
 
@@ -92,8 +114,8 @@ app.post('/apps/pet-profile-manager-2/create', async (req, res) => {
       }
     };
 
-    const response = await shopify.graphql(mutation, variables);
-    const result = response.body.data.metaobjectCreate;
+    const response = await shopifyGraphQL(mutation, variables);
+    const result = response.data.metaobjectCreate;
 
     if (result.userErrors && result.userErrors.length > 0) {
       console.error('Metaobject creation errors:', result.userErrors);
@@ -127,9 +149,9 @@ app.post('/apps/pet-profile-manager-2/create', async (req, res) => {
 
 /**
  * List all pets for a customer
- * GET /apps/pet-profile-manager-2/list?customer_id=xxx
+ * GET /apps/pet-profile/list?customer_id=xxx
  */
-app.get('/apps/pet-profile-manager-2/list', async (req, res) => {
+app.get('/apps/pet-profile/list', async (req, res) => {
   try {
     const { customer_id } = req.query;
 
@@ -152,11 +174,11 @@ app.get('/apps/pet-profile-manager-2/list', async (req, res) => {
       }
     `;
 
-    const customerResponse = await shopify.graphql(customerQuery, {
+    const customerResponse = await shopifyGraphQL(customerQuery, {
       id: `gid://shopify/Customer/${customer_id}`
     });
 
-    const metafields = customerResponse.body.data.customer?.metafields?.edges || [];
+    const metafields = customerResponse.data.customer?.metafields?.edges || [];
     const petsField = metafields.find(edge => edge.node.key === 'pets');
 
     if (!petsField) {
@@ -196,9 +218,9 @@ app.get('/apps/pet-profile-manager-2/list', async (req, res) => {
 
 /**
  * Delete a pet profile
- * DELETE /apps/pet-profile-manager-2/delete/:petId
+ * DELETE /apps/pet-profile/delete/:petId
  */
-app.delete('/apps/pet-profile-manager-2/delete/:petId', async (req, res) => {
+app.delete('/apps/pet-profile/delete/:petId', async (req, res) => {
   try {
     const { petId } = req.params;
 
@@ -217,11 +239,11 @@ app.delete('/apps/pet-profile-manager-2/delete/:petId', async (req, res) => {
       }
     `;
 
-    const response = await shopify.graphql(mutation, {
+    const response = await shopifyGraphQL(mutation, {
       id: petId
     });
 
-    const result = response.body.data.metaobjectDelete;
+    const result = response.data.metaobjectDelete;
 
     if (result.userErrors && result.userErrors.length > 0) {
       console.error('Delete errors:', result.userErrors);
@@ -264,11 +286,11 @@ async function linkPetToCustomer(customerId, petMetaobjectId) {
       }
     `;
 
-    const response = await shopify.graphql(customerQuery, {
+    const response = await shopifyGraphQL(customerQuery, {
       id: `gid://shopify/Customer/${customerId}`
     });
 
-    const existingMetafield = response.body.data.customer?.metafield;
+    const existingMetafield = response.data.customer?.metafield;
     let petIds = [];
 
     if (existingMetafield) {
@@ -293,7 +315,7 @@ async function linkPetToCustomer(customerId, petMetaobjectId) {
       }
     `;
 
-    const updateResponse = await shopify.graphql(updateMutation, {
+    const updateResponse = await shopifyGraphQL(updateMutation, {
       input: {
         id: `gid://shopify/Customer/${customerId}`,
         metafields: [
@@ -333,8 +355,8 @@ async function fetchPetMetaobject(petId) {
       }
     `;
 
-    const response = await shopify.graphql(query, { id: petId });
-    const metaobject = response.body.data.metaobject;
+    const response = await shopifyGraphQL(query, { id: petId });
+    const metaobject = response.data.metaobject;
 
     if (!metaobject) return null;
 
