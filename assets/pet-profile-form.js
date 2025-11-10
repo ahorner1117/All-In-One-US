@@ -190,7 +190,7 @@ export class PetProfileForm extends Component {
       breed: formData.get('pet_breed'),
       weight: formData.get('pet_weight'),
       allergies: allergies,
-      healthBoost: formData.get('health_boost')
+      health_boost: formData.get('health_boost')
     };
   }
 
@@ -207,7 +207,13 @@ export class PetProfileForm extends Component {
       throw new Error('You must be logged in to create a pet profile.');
     }
 
+    const payload = {
+      customer_id: customerId,
+      pet_data: petData
+    };
+
     console.log('Submitting pet data for customer:', customerId);
+    console.log('Payload:', JSON.stringify(payload, null, 2));
 
     // Submit to Shopify app endpoint to create metaobject
     try {
@@ -217,10 +223,7 @@ export class PetProfileForm extends Component {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({
-          customer_id: customerId,
-          pet_data: petData
-        })
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -232,8 +235,22 @@ export class PetProfileForm extends Component {
 
         return result;
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to save pet profile');
+        // Get response as text first, then try to parse as JSON
+        const responseText = await response.text();
+        let errorMessage = 'Failed to save pet profile';
+
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          // Response is not JSON, use the text directly
+          if (responseText) {
+            errorMessage = `Server error (${response.status}): ${responseText.substring(0, 100)}`;
+          } else {
+            errorMessage = `Server returned ${response.status} ${response.statusText}`;
+          }
+        }
+        throw new Error(errorMessage);
       }
     } catch (error) {
       console.error('❌ Error calling API:', error);

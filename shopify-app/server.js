@@ -78,6 +78,7 @@ app.post('/apps/pet-profile/create', async (req, res) => {
     const { customer_id, pet_data } = req.body;
 
     console.log('Creating pet profile for customer:', customer_id);
+    console.log('Received pet_data:', JSON.stringify(pet_data, null, 2));
 
     // Create the pet metaobject using GraphQL
     const mutation = `
@@ -109,7 +110,7 @@ app.post('/apps/pet-profile/create', async (req, res) => {
           { key: 'breed', value: pet_data.breed || '' },
           { key: 'weight', value: pet_data.weight },
           { key: 'allergies', value: JSON.stringify(pet_data.allergies || []) },
-          { key: 'health_boost', value: pet_data.healthBoost || '' }
+          { key: 'health_boost', value: pet_data.health_boost || '' }
         ]
       }
     };
