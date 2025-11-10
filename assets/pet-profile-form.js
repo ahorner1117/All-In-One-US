@@ -212,8 +212,12 @@ export class PetProfileForm extends Component {
       pet_data: petData
     };
 
-    console.log('Submitting pet data for customer:', customerId);
+    console.log('=== FRONTEND: Submitting Pet ===');
+    console.log('Customer ID:', customerId);
+    console.log('Customer ID type:', typeof customerId);
+    console.log('Pet Data:', petData);
     console.log('Payload:', JSON.stringify(payload, null, 2));
+    console.log('Request URL:', 'https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/create');
 
     // Submit to Shopify app endpoint to create metaobject
     try {
@@ -226,6 +230,9 @@ export class PetProfileForm extends Component {
         body: JSON.stringify(payload)
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers.entries()]);
+
       if (response.ok) {
         const result = await response.json();
         console.log('✅ Pet profile saved to Shopify metaobject:', result);
@@ -237,15 +244,20 @@ export class PetProfileForm extends Component {
       } else {
         // Get response as text first, then try to parse as JSON
         const responseText = await response.text();
+        console.error('❌ Error response status:', response.status);
+        console.error('❌ Error response text:', responseText);
+
         let errorMessage = 'Failed to save pet profile';
 
         try {
           const errorData = JSON.parse(responseText);
+          console.error('❌ Parsed error data:', errorData);
           errorMessage = errorData.error || errorMessage;
         } catch (e) {
+          console.error('❌ Failed to parse error response as JSON:', e.message);
           // Response is not JSON, use the text directly
           if (responseText) {
-            errorMessage = `Server error (${response.status}): ${responseText.substring(0, 100)}`;
+            errorMessage = `Server error (${response.status}): ${responseText.substring(0, 200)}`;
           } else {
             errorMessage = `Server returned ${response.status} ${response.statusText}`;
           }
