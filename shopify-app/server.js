@@ -75,7 +75,20 @@ async function shopifyGraphQL(query, variables = {}) {
  */
 app.post('/apps/pet-profile/create', async (req, res) => {
   try {
+    console.log('=== CREATE PET REQUEST ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+
     const { customer_id, pet_data } = req.body;
+
+    if (!customer_id) {
+      console.error('❌ Missing customer_id');
+      return res.status(400).json({ success: false, error: 'customer_id is required' });
+    }
+
+    if (!pet_data) {
+      console.error('❌ Missing pet_data');
+      return res.status(400).json({ success: false, error: 'pet_data is required' });
+    }
 
     console.log('Creating pet profile for customer:', customer_id);
     console.log('Received pet_data:', JSON.stringify(pet_data, null, 2));
@@ -115,14 +128,19 @@ app.post('/apps/pet-profile/create', async (req, res) => {
       }
     };
 
+    console.log('GraphQL variables:', JSON.stringify(variables, null, 2));
+
     const response = await shopifyGraphQL(mutation, variables);
+    console.log('GraphQL response:', JSON.stringify(response, null, 2));
+
     const result = response.data.metaobjectCreate;
 
     if (result.userErrors && result.userErrors.length > 0) {
-      console.error('Metaobject creation errors:', result.userErrors);
+      console.error('❌ Metaobject creation errors:', result.userErrors);
       return res.status(400).json({
         success: false,
-        error: result.userErrors[0].message
+        error: result.userErrors[0].message,
+        userErrors: result.userErrors
       });
     }
 
@@ -140,10 +158,12 @@ app.post('/apps/pet-profile/create', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error creating pet profile:', error);
+    console.error('❌ Error creating pet profile:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
+      details: error.toString()
     });
   }
 });
