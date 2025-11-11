@@ -71,6 +71,28 @@ export class PetSelector extends Component {
             this.pets = [];
           }
 
+          // Normalize allergies field - ensure it's an array
+          this.pets = this.pets.map(pet => {
+            if (pet.allergies) {
+              // If allergies is a string, try to parse it
+              if (typeof pet.allergies === 'string') {
+                try {
+                  pet.allergies = JSON.parse(pet.allergies);
+                } catch (e) {
+                  // If it's not valid JSON, treat it as a single item
+                  pet.allergies = [pet.allergies];
+                }
+              }
+              // Ensure it's an array
+              if (!Array.isArray(pet.allergies)) {
+                pet.allergies = [];
+              }
+            } else {
+              pet.allergies = [];
+            }
+            return pet;
+          });
+
           console.log('🐾 Loaded pets from customer metafield:', this.pets);
 
           // Update UI based on loaded pets
@@ -91,7 +113,7 @@ export class PetSelector extends Component {
         // Filter pets for current customer if logged in
         if (this.isLoggedIn && this.customerId) {
           this.pets = allPets.filter(pet =>
-            pet.customer_id === this.customerId
+            !pet.customer_id || pet.customer_id === this.customerId
           );
         } else {
           // If not logged in, show all pets (fallback)
