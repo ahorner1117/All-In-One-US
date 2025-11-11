@@ -1,7 +1,9 @@
 * {
   box-sizing: border-box;
 }
-
+#shopify-section-template--25612290818327__main > div.section.page-width-content.color-scheme-1 > div > a {
+  margin: 0 auto;
+}
 body {
   color: var(--color-foreground);
   background: var(--color-background);

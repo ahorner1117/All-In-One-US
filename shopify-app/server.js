@@ -14,10 +14,12 @@ const app = express();
 // Configure CORS to allow requests from your Shopify store
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests from Shopify stores (*.myshopify.com)
+    // Allow requests from Shopify stores (*.myshopify.com) and custom domains
     const allowedOrigins = [
       /\.myshopify\.com$/,
-      /^https:\/\/[\w-]+\.myshopify\.com$/
+      /^https:\/\/[\w-]+\.myshopify\.com$/,
+      /^https?:\/\/paw-in-one\.com$/,
+      /^https?:\/\/.*\.paw-in-one\.com$/
     ];
 
     // Allow requests with no origin (like mobile apps or Postman)

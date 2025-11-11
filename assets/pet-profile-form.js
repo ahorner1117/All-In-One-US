@@ -149,6 +149,11 @@ export class PetProfileForm extends Component {
       // Show success message
       this.showSuccess();
 
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('petProfileCreated', {
+        detail: { petData }
+      }));
+
       // Reset form after delay
       setTimeout(() => {
         form.reset();

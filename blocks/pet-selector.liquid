@@ -1,0 +1,346 @@
+
+{% liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+
+  assign product_id = closest.product.id
+  assign element_id = 'PetSelector-product_id-block_id' | replace: 'product_id', product_id | replace: 'block_id', block.id
+  assign product_form_id = 'BuyButtons-ProductForm-section.id' | replace: 'section.id', section.id
+
+%}
+
+{% comment %} Build pets array from metaobjects {% endcomment %}
+{% if customer and customer.metafields.custom.pets.value %}
+  {% assign pet_metaobjects = customer.metafields.custom.pets.value %}
+  {% if pet_metaobjects.size > 0 %}
+    {% capture pets_json_array %}[
+      {%- for pet in pet_metaobjects -%}
+        {
+          "id": {{ pet.system.id | json }},
+          "name": {{ pet.name.value | json }},
+          "type": {{ pet.type.value | json }},
+          "birthday": {{ pet.birthday.value | json }},
+          "breed": {{ pet.breed.value | json }},
+          "weight": {{ pet.weight.value | json }},
+          "allergies": {{ pet.allergies.value | default: "[]" }},
+          "health_boost": {{ pet.health_boost.value | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]{% endcapture %}
+  {% endif %}
+{% endif %}
+
+<pet-selector
+  class="pet-selector spacing-style"
+  style="{% render 'spacing-style', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+  data-product-form-id="{{ product_form_id }}"
+  {% if customer %}
+    data-customer-logged-in="true"
+    data-customer-id="{{ customer.id }}"
+    {% if pets_json_array != blank %}
+      data-customer-pets="{{ pets_json_array | escape }}"
+    {% endif %}
+  {% else %}
+    data-customer-logged-in="false"
+  {% endif %}
+>
+  <div class="pet-selector__content">
+    {% if block_settings.heading != blank %}
+      <label for="{{ element_id }}" class="pet-selector__label">
+        {{ block_settings.heading | escape }}
+      </label>
+    {% endif %}
+
+    {% if block_settings.description != blank %}
+      <p class="pet-selector__description">
+        {{ block_settings.description | escape }}
+      </p>
+    {% endif %}
+
+    <!-- Dropdown (shown when pets exist) -->
+    <div class="pet-selector__dropdown-wrapper" ref="dropdownWrapper" hidden>
+      <select
+        id="{{ element_id }}"
+        class="pet-selector__select field__input"
+        ref="petSelect"
+        form="{{ product_form_id }}"
+        {% if block_settings.required %}required{% endif %}
+      >
+        <option value="">{{ block_settings.placeholder_text | escape }}</option>
+        <!-- Options will be populated by JavaScript -->
+      </select>
+
+      <!-- Hidden inputs for line item properties -->
+      <input type="hidden" name="properties[_Pet ID]" ref="petIdInput" form="{{ product_form_id }}">
+      <input type="hidden" name="properties[Pet Name]" ref="petNameInput" form="{{ product_form_id }}">
+      <input type="hidden" name="properties[_Pet Type]" ref="petTypeInput" form="{{ product_form_id }}">
+      <input type="hidden" name="properties[_Pet Allergies]" ref="petAllergiesInput" form="{{ product_form_id }}">
+    </div>
+
+    <!-- No pets message (shown when no pets exist) -->
+    <div class="pet-selector__no-pets" ref="noPetsMessage" hidden>
+      <div class="pet-selector__no-pets-content">
+        <span class="pet-selector__icon">🐾</span>
+        <p class="pet-selector__no-pets-text">
+          {{ block_settings.no_pets_message | escape }}
+        </p>
+        <a href="{{ block_settings.add_pet_url }}" class="button button--secondary pet-selector__add-pet-button">
+          {{ block_settings.add_pet_button_text | escape }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Not logged in message -->
+    <div class="pet-selector__not-logged-in" ref="notLoggedInMessage" hidden>
+      <div class="pet-selector__not-logged-in-content">
+        <span class="pet-selector__icon">🐾</span>
+        <p class="pet-selector__not-logged-in-text">
+          {{ block_settings.login_message | escape }}
+        </p>
+        <a href="/account/login" class="button button--secondary pet-selector__login-button">
+          {{ block_settings.login_button_text | escape }}
+        </a>
+      </div>
+    </div>
+  </div>
+</pet-selector>
+
+{% stylesheet %}
+  .pet-selector {
+    display: block;
+    width: 100%;
+  }
+
+  .pet-selector__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .pet-selector__label {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .pet-selector__description {
+    font-size: var(--font-size-sm);
+    color: var(--color-foreground);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .pet-selector__dropdown-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .pet-selector__select {
+    width: 100%;
+    padding: var(--padding-lg) var(--padding-xl);
+    border-radius: var(--style-border-radius-inputs);
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+  }
+
+  .pet-selector__select:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .pet-selector__select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .pet-selector__no-pets,
+  .pet-selector__not-logged-in {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pet-selector__no-pets[hidden],
+  .pet-selector__not-logged-in[hidden],
+  .pet-selector__dropdown-wrapper[hidden] {
+    display: none !important;
+  }
+
+  .pet-selector__no-pets-content,
+  .pet-selector__not-logged-in-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-md);
+    padding: var(--padding-xl);
+    border-radius: var(--style-border-radius-inputs);
+    border: 2px dashed var(--color-input-border);
+    background-color: var(--color-background);
+    text-align: center;
+  }
+
+  .pet-selector__icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .pet-selector__no-pets-text,
+  .pet-selector__not-logged-in-text {
+    font-size: var(--font-size-base);
+    color: var(--color-foreground);
+    margin: 0;
+    max-width: 400px;
+  }
+
+  .pet-selector__add-pet-button,
+  .pet-selector__login-button {
+    min-width: 200px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pet-selector__add-pet-button,
+    .pet-selector__login-button {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+<script
+  src="{{ 'pet-selector.js' | asset_url }}"
+  type="module"
+  defer
+></script>
+
+{% schema %}
+{
+  "name": "Pet Selector",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pet Selector Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Who is this for?"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Select which pet this product is for"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Dropdown Placeholder",
+      "default": "Select a pet..."
+    },
+    {
+      "type": "checkbox",
+      "id": "required",
+      "label": "Required",
+      "default": false,
+      "info": "Require customers to select a pet before adding to cart"
+    },
+    {
+      "type": "header",
+      "content": "No Pets Message"
+    },
+    {
+      "type": "textarea",
+      "id": "no_pets_message",
+      "label": "Message when no pets exist",
+      "default": "Create a pet profile to personalize your order and ensure we send the perfect products for your furry friend!"
+    },
+    {
+      "type": "text",
+      "id": "add_pet_button_text",
+      "label": "Add Pet Button Text",
+      "default": "Add Pet Profile"
+    },
+    {
+      "type": "url",
+      "id": "add_pet_url",
+      "label": "Add Pet Page URL",
+      "info": "Link to the page with the pet profile form"
+    },
+    {
+      "type": "header",
+      "content": "Not Logged In Message"
+    },
+    {
+      "type": "textarea",
+      "id": "login_message",
+      "label": "Message when not logged in",
+      "default": "Log in to select which pet this product is for and get personalized recommendations!"
+    },
+    {
+      "type": "text",
+      "id": "login_button_text",
+      "label": "Login Button Text",
+      "default": "Log In"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pet Selector",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
