@@ -50,11 +50,44 @@ export class PetSelector extends Component {
   }
 
   /**
-   * Load pets from customer metafield or localStorage
+   * Load pets from API, customer metafield, or localStorage
    */
-  loadPets() {
+  async loadPets() {
     try {
-      // First, try to load from customer metafield (passed from Liquid)
+      // If logged in, try to fetch from API first
+      if (this.isLoggedIn && this.customerId) {
+        console.log('🐾 Fetching pets from API for customer:', this.customerId);
+
+        try {
+          const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/list?customer_id=${this.customerId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            this.pets = data.pets || [];
+
+            // Normalize allergies field
+            this.pets = this.normalizePets(this.pets);
+
+            console.log('✅ Loaded', this.pets.length, 'pets from API');
+
+            // Update localStorage cache
+            this.updateLocalStorageCache(this.pets);
+
+            this.updateUI();
+            return;
+          }
+        } catch (apiError) {
+          console.warn('⚠️ API not available, falling back to metafield/localStorage');
+        }
+      }
+
+      // Fallback 1: Try to load from customer metafield (passed from Liquid)
       const metafieldPets = this.getAttribute('data-customer-pets');
 
       if (metafieldPets) {
@@ -71,27 +104,8 @@ export class PetSelector extends Component {
             this.pets = [];
           }
 
-          // Normalize allergies field - ensure it's an array
-          this.pets = this.pets.map(pet => {
-            if (pet.allergies) {
-              // If allergies is a string, try to parse it
-              if (typeof pet.allergies === 'string') {
-                try {
-                  pet.allergies = JSON.parse(pet.allergies);
-                } catch (e) {
-                  // If it's not valid JSON, treat it as a single item
-                  pet.allergies = [pet.allergies];
-                }
-              }
-              // Ensure it's an array
-              if (!Array.isArray(pet.allergies)) {
-                pet.allergies = [];
-              }
-            } else {
-              pet.allergies = [];
-            }
-            return pet;
-          });
+          // Normalize allergies field
+          this.pets = this.normalizePets(this.pets);
 
           console.log('🐾 Loaded pets from customer metafield:', this.pets);
 
@@ -104,7 +118,7 @@ export class PetSelector extends Component {
         }
       }
 
-      // Fallback: Load from localStorage
+      // Fallback 2: Load from localStorage
       const storedPets = localStorage.getItem('customer_pets');
 
       if (storedPets) {
@@ -119,6 +133,9 @@ export class PetSelector extends Component {
           // If not logged in, show all pets (fallback)
           this.pets = allPets;
         }
+
+        // Normalize allergies field
+        this.pets = this.normalizePets(this.pets);
       } else {
         this.pets = [];
       }
@@ -132,6 +149,60 @@ export class PetSelector extends Component {
       this.pets = [];
       this.updateUI();
     }
+  }
+
+  /**
+   * Normalize pets data - ensure allergies is always an array
+   * @param {Array} pets - Array of pet objects
+   * @returns {Array} Normalized pets
+   */
+  normalizePets(pets) {
+    return pets.map(pet => {
+      if (pet.allergies) {
+        // If allergies is a string, try to parse it
+        if (typeof pet.allergies === 'string') {
+          try {
+            pet.allergies = JSON.parse(pet.allergies);
+          } catch (e) {
+            // If it's not valid JSON, treat it as a single item
+            pet.allergies = [pet.allergies];
+          }
+        }
+        // Ensure it's an array
+        if (!Array.isArray(pet.allergies)) {
+          pet.allergies = [];
+        }
+      } else {
+        pet.allergies = [];
+      }
+      return pet;
+    });
+  }
+
+  /**
+   * Update localStorage cache with pets from API
+   * @param {Array} pets - Fresh pet data from API
+   */
+  updateLocalStorageCache(pets) {
+    if (!this.customerId) return;
+
+    // Get all pets from localStorage
+    const allPets = JSON.parse(localStorage.getItem('customer_pets') || '[]');
+
+    // Remove this customer's old pets
+    const otherPets = allPets.filter(p => p.customer_id !== this.customerId);
+
+    // Add fresh pets with customer_id
+    const updatedPets = [
+      ...otherPets,
+      ...pets.map(pet => ({
+        ...pet,
+        customer_id: this.customerId
+      }))
+    ];
+
+    localStorage.setItem('customer_pets', JSON.stringify(updatedPets));
+    console.log('💾 Updated localStorage cache with', pets.length, 'pets');
   }
 
   /**
