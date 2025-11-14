@@ -91,8 +91,9 @@ export class PetSignupStepper extends Component {
     // Set up weight options based on pet type
     this.updateWeightOptions(type);
 
-    // Scroll to the stepper form on mobile
-    if (this.refs.stepperForm) {
+    // Scroll to the stepper form on mobile only
+    const isMobile = window.matchMedia('(max-width: 749px)').matches;
+    if (isMobile && this.refs.stepperForm) {
       setTimeout(() => {
         this.refs.stepperForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);

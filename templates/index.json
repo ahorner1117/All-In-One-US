@@ -279,7 +279,7 @@
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "rte",
+                    "type_preset": "h4",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -480,7 +480,7 @@
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "rte",
+                    "type_preset": "h4",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -766,6 +766,82 @@
         "padding-block-end": 48
       }
     },
+    "meet_the_team_gpmYyx": {
+      "type": "meet-the-team",
+      "blocks": {
+        "team_member_tcNrMc": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8229_a8fe8f5e-d0ac-4263-becd-30a4a704a06a.png",
+            "name": "Lola",
+            "position": "CEO",
+            "description": "<p>Lola is the CEO of PawPack, personally ensuring that every luxury pet box meets her high standards. This is her passion project, delivering luxury pet experiences around the globe while providing support to shelters and pet sanctuaries through volunteer work and donations from every subscription box. She’s brought on her human assistant, Josh Rojas, to handle daily tasks and logistics, along with the occasional belly rubs during her very busy schedule. </p>"
+          }
+        },
+        "team_member_HQnqLX": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/1406247F-3890-446F-AE89-5686FDB8C92F_1_201_a.jpg",
+            "name": "Toby",
+            "position": "Marketing Director",
+            "description": "<p>My name’s Toby, Paw In One’s Marketing Director (but most call me the Barketing Director). I’m in charge of all things social media — and I’ve appointed Tatum as my assistant to handle the important stuff: car rides, photoshoots, and the egg out of her breakfast sandwich</p>"
+          }
+        },
+        "team_member_fq9dCP": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_6499_PNG.png",
+            "name": "Tejas",
+            "position": "CFO",
+            "description": "<p>Tejas is our CFO. He is constantly running around building relationships and ensuring that we maintain our high standards and integrity for a successful business. He has brought on Kristen Suggs-Bohrer as his emotional support human. She never leaves his side and handles his high quality and stringent meals that ensure he gets the energy and supplements for peak performance. In his spare time he enjoys traveling to horse shows and watching his human compete. </p>"
+          }
+        },
+        "team_member_kHJ4tL": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8298.png",
+            "name": "Sabre",
+            "position": "Medical Director",
+            "description": "<p>Sabre here! I am the Medical Director at Paw In One. With a background as a Veterinary Technician I hand pick the best products that are both delicious and beneficial, with the help of my mom, Payton. My favorite past times are talking back and being tucked in every night. I may look big and scary but really I'm big hearted, and I prefer to spend my time with my tiny human. </p>"
+          }
+        },
+        "team_member_w8HBJ9": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8237.png",
+            "name": "Bella",
+            "position": "Head of Security",
+            "description": "<p>Tank is our head of security. He takes pride in patrolling the perimeter, and meeting everyone that comes to our facility to ensure the safety of our team. Although he tends to take naps on the job he never misses the opportunity to get vocal with every small noise. He’s a lone wolf but a social butterfly. </p>"
+          }
+        }
+      },
+      "block_order": [
+        "team_member_tcNrMc",
+        "team_member_HQnqLX",
+        "team_member_fq9dCP",
+        "team_member_kHJ4tL",
+        "team_member_w8HBJ9"
+      ],
+      "name": "Meet the Team",
+      "settings": {
+        "heading": "Meet the Team",
+        "heading_alignment": "center",
+        "layout_type": "carousel",
+        "carousel_on_mobile": true,
+        "columns": 4,
+        "mobile_columns": "1",
+        "mobile_card_size": "70cqw",
+        "columns_gap": 16,
+        "rows_gap": 16,
+        "icons_style": "arrow",
+        "icons_shape": "circle",
+        "section_width": "page-width",
+        "gap": 24,
+        "color_scheme": "scheme-3",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
     "section_YHKNiE": {
       "type": "section",
       "blocks": {
@@ -972,6 +1048,7 @@
         "group_n37xww",
         "group_egnHgq"
       ],
+      "disabled": true,
       "name": "t:names.split_showcase",
       "settings": {
         "content_direction": "row",
@@ -1007,6 +1084,7 @@
     "slideshow_dNPFDn",
     "pet_signup_stepper_main",
     "product_list_fa6P9H",
+    "meet_the_team_gpmYyx",
     "section_YHKNiE"
   ]
 }
