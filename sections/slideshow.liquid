@@ -49,6 +49,23 @@
   %}
 </div>
 
+{% stylesheet %}
+  /* Match slideshow headings to other section headings */
+  .container-background-image h2,
+  .container-background-image .h2,
+  .container-background-image .text-block.h2 > * {
+    font-size: 3rem !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .container-background-image h2,
+    .container-background-image .h2,
+    .container-background-image .text-block.h2 > * {
+      font-size: 2.5rem !important;
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.slideshow",

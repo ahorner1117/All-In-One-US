@@ -19,7 +19,7 @@
     font-size: 1rem;
   }
   #shopify-section-{{ section.id }} .pet-type-selection__title{
-    font-size: 2rem;
+    font-size: 3rem;
   }
   
 </style>
@@ -485,7 +485,7 @@
   }
 
   .pet-type-selection__title {
-    font-size: var(--font-size-xxl);
+    font-size: 3rem;
     font-weight: 700;
     color: var(--color-foreground);
     margin: 0 0 var(--gap-md) 0;
@@ -505,6 +505,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    .pet-type-selection__title {
+      font-size: 2rem;
+    }
+
     .pet-type-selection__cards {
       grid-template-columns: 1fr;
     }

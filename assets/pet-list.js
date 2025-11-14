@@ -390,7 +390,9 @@ export class PetList extends Component {
 
     try {
       // Delete from Shopify metaobject via app endpoint
-      const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/delete/${petId}`, {
+      // URL-encode the petId since it contains slashes (gid://shopify/Metaobject/...)
+      const encodedPetId = encodeURIComponent(petId);
+      const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/delete/${encodedPetId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
