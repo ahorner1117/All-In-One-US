@@ -376,6 +376,8 @@
       "name": "Meet the Team",
       "category": "Custom",
       "settings": {
+        "heading": "Meet the Team",
+        "heading_alignment": "center",
         "layout_type": "carousel",
         "columns": 4,
         "columns_gap": 16,
@@ -426,6 +428,28 @@
 {% endschema %}
 
 {% stylesheet %}
+  /* Section Header Styles */
+  .meet-the-team__header {
+    margin-bottom: var(--gap-xl);
+  }
+
+  .meet-the-team__heading {
+    font-size: var(--font-size-xxl);
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-foreground);
+  }
+
+  @media screen and (max-width: 749px) {
+    .meet-the-team__header {
+      margin-bottom: var(--gap-lg);
+    }
+
+    .meet-the-team__heading {
+      font-size: var(--font-size-xl);
+    }
+  }
+
   /* Team Member Card Styles */
   .team-member-card {
     display: flex;

@@ -41,9 +41,10 @@
   class="buy-buttons-block buy-buttons-block--{{ block.id }}"
   {{ block.shopify_attributes }}
 >
-  {%- if product != blank -%}
-    {%- assign product_form_id = 'BuyButtons-ProductForm-' | append: section.id -%}
-    <product-form-component
+  {% if customer %}
+    {%- if product != blank -%}
+      {%- assign product_form_id = 'BuyButtons-ProductForm-' | append: section.id -%}
+      <product-form-component
       data-section-id="{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-product-url="{{ product.url }}"
@@ -157,9 +158,19 @@
       </button>
     </div>
   {%- endif -%}
+  {% else %}
+    <div class="buy-buttons__login-prompt">
+      <div class="buy-buttons__login-message">
+        <p>Log in to purchase this product and enjoy personalized recommendations for your pets!</p>
+      </div>
+      <a href="{{ routes.account_login_url }}" class="button button--primary">
+        Log In to Purchase
+      </a>
+    </div>
+  {% endif %}
 </span>
 
-{% if block_settings.show_pickup_availability %}
+{% if customer and block_settings.show_pickup_availability %}
   <script
     src="{{ 'local-pickup.js' | asset_url }}"
     type="module"
@@ -487,6 +498,34 @@
   .pickup-location__close-button {
     top: calc(var(--padding-2xl) - (var(--icon-size-xs) / 2));
     right: calc(var(--padding-2xl) - var(--icon-size-xs));
+  }
+
+  /* Login prompt styles */
+  .buy-buttons__login-prompt {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    padding: var(--padding-xl);
+    background-color: rgba(var(--color-foreground-rgb), 0.03);
+    border: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+    border-radius: var(--style-border-radius-inputs);
+    text-align: center;
+  }
+
+  .buy-buttons__login-message {
+    color: var(--color-foreground);
+  }
+
+  .buy-buttons__login-message p {
+    margin: 0;
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+  }
+
+  .buy-buttons__login-prompt .button {
+    width: 100%;
+    padding-inline: var(--padding-4xl);
+    padding-block: var(--padding-lg);
   }
 {% endstylesheet %}
 
