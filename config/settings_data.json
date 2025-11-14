@@ -12,11 +12,11 @@
     "logo": "shopify://shop_images/IMG_7980.jpg",
     "logo_height": 60,
     "logo_height_mobile": 35,
-    "type_body_font": "open_sans_n4",
+    "type_body_font": "playfair_n4",
     "type_subheading_font": "inter_n5",
-    "type_heading_font": "poetsen_one_n4",
+    "type_heading_font": "playfair_n4",
     "type_accent_font": "inter_n7",
-    "type_size_paragraph": "14",
+    "type_size_paragraph": "16",
     "type_line_height_paragraph": "body-loose",
     "type_font_h1": "heading",
     "type_size_h1": "56",
@@ -85,6 +85,23 @@
         "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
         "disabled": true,
         "settings": {}
+      },
+      "144831480468751239": {
+        "type": "shopify://apps/essential-upsell/blocks/app-embed/50627fd9-24fd-4250-8614-accc12826d80",
+        "disabled": false,
+        "settings": {}
+      },
+      "7079518687644006178": {
+        "type": "shopify://apps/checkout-blocks/blocks/app-embed/b0024ca5-9de8-4bf0-a92f-cd0783877ae2",
+        "disabled": false,
+        "settings": {
+          "utm_id": true,
+          "utm_source": true,
+          "utm_medium": true,
+          "utm_campaign": true,
+          "utm_term": true,
+          "ref": true
+        }
       }
     },
     "color_schemes": {

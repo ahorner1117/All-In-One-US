@@ -105,6 +105,10 @@
         "boost_question": "What kind of boost does [pet_name] need most?",
         "submit_button_text": "Create Pet Profile",
         "success_message": "Pet profile created successfully! 🎉",
+        "login_title": "Sign In Required",
+        "login_message": "Please sign in to your account to create and manage your pet profiles.",
+        "login_button_text": "Sign In",
+        "register_button_text": "Create Account",
         "color_scheme": "scheme-1",
         "padding-block-start": 20,
         "padding-block-end": 60

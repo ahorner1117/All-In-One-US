@@ -13,42 +13,49 @@
       {% render 'spacing-style', settings: section.settings %}
     "
   >
-    <pet-list
-      class="pet-list"
-      section-id="{{ section.id }}"
-      {% if customer %}
+    {% if customer %}
+      <pet-list
+        class="pet-list"
+        section-id="{{ section.id }}"
         customer-logged-in="true"
         customer-id="{{ customer.id }}"
-      {% else %}
-        customer-logged-in="false"
-      {% endif %}
-    >
-      <div class="pet-list__header">
-        <h2 class="pet-list__title">{{ section.settings.title }}</h2>
-        {% if section.settings.show_add_button %}
-          <a href="{{ section.settings.add_pet_url }}" class="button button--secondary">
-            {{ section.settings.add_button_text }}
-          </a>
-        {% endif %}
-      </div>
+      >
+        <div class="pet-list__header">
+          <h2 class="pet-list__title">{{ section.settings.title }}</h2>
+          {% if section.settings.show_add_button %}
+            <a href="{{ section.settings.add_pet_url }}" class="button button--secondary">
+              {{ section.settings.add_button_text }}
+            </a>
+          {% endif %}
+        </div>
 
-      <div class="pet-list__empty" ref="emptyState">
-        <div class="pet-list__empty-icon">🐾</div>
-        <p class="pet-list__empty-text">{{ section.settings.empty_message }}</p>
-        {% if section.settings.show_add_button and section.settings.add_pet_url != blank %}
-          <a href="{{ section.settings.add_pet_url }}" class="button">
-            {{ section.settings.empty_button_text }}
-          </a>
-        {% endif %}
-      </div>
+        <div class="pet-list__empty" ref="emptyState">
+          <div class="pet-list__empty-icon">🐾</div>
+          <p class="pet-list__empty-text">{{ section.settings.empty_message }}</p>
+          {% if section.settings.show_add_button and section.settings.add_pet_url != blank %}
+            <a href="{{ section.settings.add_pet_url }}" class="button">
+              {{ section.settings.empty_button_text }}
+            </a>
+          {% endif %}
+        </div>
 
-      <div class="pet-list__loading" ref="loadingState" hidden>
-        <div class="pet-list__spinner"></div>
-        <p>Loading your pets...</p>
-      </div>
+        <div class="pet-list__loading" ref="loadingState" hidden>
+          <div class="pet-list__spinner"></div>
+          <p>Loading your pets...</p>
+        </div>
 
-      <div class="pet-list__grid" ref="petGrid"></div>
-    </pet-list>
+        <div class="pet-list__grid" ref="petGrid"></div>
+      </pet-list>
+    {% else %}
+      <div class="pet-list__login-prompt">
+        <div class="pet-list__login-icon">🐾</div>
+        <h2 class="pet-list__login-title">Start Building Your Pet Profile</h2>
+        <p class="pet-list__login-text">Log in to add your pets and get personalized recommendations for subscription boxes tailored just for them!</p>
+        <a href="{{ routes.account_login_url }}" class="button">
+          Add Your First Pet
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
 
@@ -385,5 +392,37 @@
 
   .pet-delete-modal__button:hover {
     opacity: 0.8;
+  }
+
+  /* Login prompt styles */
+  .pet-list__login-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-xxl) var(--padding-lg);
+    text-align: center;
+    min-height: 400px;
+  }
+
+  .pet-list__login-icon {
+    font-size: 4rem;
+    margin-bottom: var(--gap-lg);
+    opacity: 0.3;
+  }
+
+  .pet-list__login-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--gap-md);
+    color: var(--color-foreground);
+  }
+
+  .pet-list__login-text {
+    font-size: var(--font-size-md);
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-bottom: var(--gap-xl);
+    max-width: 500px;
   }
 {% endstylesheet %}

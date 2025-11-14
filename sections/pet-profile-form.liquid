@@ -13,15 +13,12 @@
       {% render 'spacing-style', settings: section.settings %}
     "
   >
+    {% if customer %}
     <pet-profile-form
       class="pet-profile-form"
       section-id="{{ section.id }}"
-      {% if customer %}
-        customer-logged-in="true"
-        customer-id="{{ customer.id }}"
-      {% else %}
-        customer-logged-in="false"
-      {% endif %}
+      customer-logged-in="true"
+      customer-id="{{ customer.id }}"
     >
       <div class="pet-profile-form__success" ref="successMessage" hidden>
         {{- 'icon-checkmark.svg' | inline_asset_content -}}
@@ -213,6 +210,24 @@
         </button>
       </form>
     </pet-profile-form>
+    {% else %}
+    <!-- Login Required Message -->
+    <div class="pet-profile-form__login-required">
+      <div class="login-required__icon">
+        🔒
+      </div>
+      <h2 class="login-required__title">{{ section.settings.login_title | default: 'Sign In Required' }}</h2>
+      <p class="login-required__message">{{ section.settings.login_message | default: 'Please sign in to your account to create and manage your pet profiles.' }}</p>
+      <div class="login-required__actions">
+        <a href="/account/login?return_url={{ request.path | url_encode }}" class="button button--primary">
+          {{ section.settings.login_button_text | default: 'Sign In' }}
+        </a>
+        <a href="/account/register?return_url={{ request.path | url_encode }}" class="button button--secondary">
+          {{ section.settings.register_button_text | default: 'Create Account' }}
+        </a>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 
@@ -298,6 +313,34 @@
       "id": "success_message",
       "label": "Success Message",
       "default": "Pet profile created successfully! 🎉"
+    },
+    {
+      "type": "header",
+      "content": "Login Required Settings"
+    },
+    {
+      "type": "text",
+      "id": "login_title",
+      "label": "Login Required Title",
+      "default": "Sign In Required"
+    },
+    {
+      "type": "textarea",
+      "id": "login_message",
+      "label": "Login Required Message",
+      "default": "Please sign in to your account to create and manage your pet profiles."
+    },
+    {
+      "type": "text",
+      "id": "login_button_text",
+      "label": "Sign In Button Text",
+      "default": "Sign In"
+    },
+    {
+      "type": "text",
+      "id": "register_button_text",
+      "label": "Create Account Button Text",
+      "default": "Create Account"
     },
     {
       "type": "color_scheme",
@@ -412,7 +455,7 @@
     border: var(--style-border-width-inputs) solid var(--color-input-border);
     background-color: var(--color-input-background);
     color: var(--color-input-text);
-    font-size: var(--font-size-base);
+    font-size: 16px;
   }
 
   .form-field__input:focus {
@@ -528,5 +571,60 @@
   .pet-profile-form__submit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  /* Login Required Styles */
+  .pet-profile-form__login-required {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-lg);
+    padding: var(--padding-xxl);
+    text-align: center;
+    min-height: 400px;
+  }
+
+  .login-required__icon {
+    font-size: 4rem;
+    line-height: 1;
+  }
+
+  .login-required__title {
+    font-size: var(--font-size-xxl);
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .login-required__message {
+    font-size: var(--font-size-lg);
+    color: var(--color-foreground);
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0;
+  }
+
+  .login-required__actions {
+    display: flex;
+    gap: var(--gap-md);
+    margin-top: var(--gap-md);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .login-required__actions .button {
+    min-width: 150px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .login-required__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .login-required__actions .button {
+      width: 100%;
+    }
   }
 {% endstylesheet %}
