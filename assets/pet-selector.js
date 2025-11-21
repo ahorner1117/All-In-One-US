@@ -59,7 +59,7 @@ export class PetSelector extends Component {
         console.log('🐾 Fetching pets from API for customer:', this.customerId);
 
         try {
-          const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/list?customer_id=${this.customerId}`, {
+          const response = await fetch(`https://pet-profile-app.vercel.app/apps/pet-profile/list?customer_id=${this.customerId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

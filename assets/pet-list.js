@@ -36,7 +36,7 @@ export class PetList extends Component {
 
     try {
       // Fetch from Shopify metaobjects via app endpoint
-      const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/list?customer_id=${customerId}`, {
+      const response = await fetch(`https://pet-profile-app.vercel.app/apps/pet-profile/list?customer_id=${customerId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -392,7 +392,7 @@ export class PetList extends Component {
       // Delete from Shopify metaobject via app endpoint
       // URL-encode the petId since it contains slashes (gid://shopify/Metaobject/...)
       const encodedPetId = encodeURIComponent(petId);
-      const response = await fetch(`https://your-pet-profile-app-96d901c94a97.herokuapp.com/apps/pet-profile/delete/${encodedPetId}`, {
+      const response = await fetch(`https://pet-profile-app.vercel.app/apps/pet-profile/delete/${encodedPetId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

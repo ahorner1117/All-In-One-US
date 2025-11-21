@@ -63,6 +63,12 @@
     .container-background-image .text-block.h2 > * {
       font-size: 2.5rem !important;
     }
+
+    /* Make slides taller on mobile */
+    .container-background-image slideshow-slides[size='large'],
+    .container-background-image slideshow-slide {
+      min-height: 30rem !important;
+    }
   }
 {% endstylesheet %}
 
