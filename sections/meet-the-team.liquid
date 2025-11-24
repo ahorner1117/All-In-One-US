@@ -9,6 +9,13 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
+<style>
+  @media screen and (min-width:900px){
+    .section-meet-the-team {
+      padding: 0 10%;
+    }
+  }
+</style>
 <div
   class="
     section
@@ -331,6 +338,17 @@
     },
     {
       "type": "range",
+      "id": "card_max_width",
+      "label": "Card Max Width",
+      "info": "Maximum width for each card (cards will size based on columns setting but won't exceed this)",
+      "min": 250,
+      "max": 600,
+      "step": 25,
+      "unit": "px",
+      "default": 450
+    },
+    {
+      "type": "range",
       "id": "gap",
       "label": "Content Gap",
       "info": "Gap between header content and team cards",
@@ -447,6 +465,22 @@
 
     .meet-the-team__heading {
       font-size: 2.5rem;
+    }
+  }
+
+  /* Override grid to center cards and constrain width on desktop */
+  @media screen and (min-width: 750px) {
+    .section-meet-the-team .resource-list--grid {
+      /* Use auto-fit to create only as many columns as fit, centered */
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), {{ section.settings.card_max_width }}px)) !important;
+      justify-content: center;
+    }
+  }
+
+  /* Keep mobile responsive with original behavior */
+  @media screen and (max-width: 749px) {
+    .section-meet-the-team .resource-list--grid {
+      grid-template-columns: var(--resource-list-columns-mobile) !important;
     }
   }
 
