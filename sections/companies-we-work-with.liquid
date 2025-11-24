@@ -1,0 +1,586 @@
+{% liquid
+  # Calculate max items based on layout
+  if section.settings.layout_type == 'carousel'
+    assign max_items = section.blocks.size
+  elsif section.settings.layout_type == 'grid'
+    assign max_items = section.blocks.size
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<div
+  class="
+    section
+    section--{{ section.settings.section_width }}
+    color-{{ section.settings.color_scheme }}
+    section-resource-list
+    spacing-style
+    gap-style
+  "
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    {% render 'gap-style', value: section.settings.gap %}
+  "
+>
+  {% if section.settings.heading != blank %}
+    <div class="companies-we-work-with__header" style="text-align: {{ section.settings.heading_alignment }};">
+      <h2 class="companies-we-work-with__heading">{{ section.settings.heading }}</h2>
+      {% if section.settings.subheading != blank %}
+        <p class="companies-we-work-with__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% capture list_items %}
+    {% for block in section.blocks %}
+      <div class="resource-list__item company-card-wrapper" {{ block.shopify_attributes }}>
+        <div class="company-card">
+          {% if block.settings.image != blank %}
+            <div class="company-card__image">
+              {{
+                block.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  width: block.settings.image.width,
+                  height: block.settings.image.height,
+                  alt: block.settings.company_name
+              }}
+            </div>
+          {% else %}
+            <div class="company-card__image company-card__image--placeholder">
+              <div class="company-card__placeholder-icon">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="10" y="10" width="40" height="40" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <circle cx="23" cy="25" r="4" fill="currentColor"/>
+                  <polyline points="10,45 20,35 30,40 50,20" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="company-card__content">
+            {% if block.settings.company_name != blank %}
+              <h3 class="company-card__name">{{ block.settings.company_name }}</h3>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <div class="company-card__description">
+                {{ block.settings.description }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% unless forloop.last %}
+        <!--@list/split-->
+      {% endunless %}
+    {% endfor %}
+  {% endcapture %}
+
+  {% liquid
+    # Create an array from the list items to be used for different layout types
+    assign list_items_array = list_items | strip | split: '<!--@list/split-->'
+  %}
+
+  {% render 'resource-list',
+    list_items: list_items,
+    list_items_array: list_items_array,
+    settings: section.settings,
+    carousel_ref: 'companiesCarousel',
+    slide_count: max_items,
+    content_type: 'companies',
+    test_id: 'companies-we-work-with-list'
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Companies We Work With",
+  "class": "section-companies-we-work-with",
+  "max_blocks": 20,
+  "blocks": [
+    {
+      "type": "company",
+      "name": "Company",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Company Logo/Image"
+        },
+        {
+          "type": "text",
+          "id": "company_name",
+          "label": "Company Name",
+          "default": "Company Name"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Add a description about this company partnership</p>"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Companies We Work With"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Layout Type",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_on_mobile",
+      "label": "Carousel on Mobile",
+      "default": true,
+      "info": "Enable carousel layout on mobile devices",
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile Columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2",
+      "visible_if": "{{ section.settings.layout_type == 'grid' and section.settings.carousel_on_mobile == false }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_card_size",
+      "label": "Mobile Card Size",
+      "options": [
+        {
+          "value": "70cqw",
+          "label": "Large"
+        },
+        {
+          "value": "60cqw",
+          "label": "Medium"
+        },
+        {
+          "value": "50cqw",
+          "label": "Small"
+        }
+      ],
+      "default": "60cqw",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Horizontal Gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "Vertical Gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ section.settings.layout_type == 'grid'}}"
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "range",
+      "id": "image_max_height",
+      "label": "Image Max Height",
+      "info": "Maximum height for images (maintains natural aspect ratio)",
+      "min": 100,
+      "max": 400,
+      "step": 25,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Carousel Navigation",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Navigation Icon",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "Arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevrons"
+        },
+        {
+          "value": "arrows_large",
+          "label": "Large Arrows"
+        },
+        {
+          "value": "chevron_large",
+          "label": "Large Chevrons"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrow",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Icon Background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "circle",
+      "visible_if": "{{ section.settings.icons_style != 'none' and section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Content Gap",
+      "info": "Gap between header content and company cards",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Companies We Work With",
+      "category": "Custom",
+      "settings": {
+        "heading": "Companies We Work With",
+        "heading_alignment": "center",
+        "layout_type": "grid",
+        "columns": 4,
+        "columns_gap": 24,
+        "rows_gap": 24,
+        "image_max_height": 200,
+        "section_width": "page-width",
+        "gap": 32,
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      },
+      "blocks": [
+        {
+          "type": "company",
+          "settings": {
+            "company_name": "Company One"
+          }
+        },
+        {
+          "type": "company",
+          "settings": {
+            "company_name": "Company Two"
+          }
+        },
+        {
+          "type": "company",
+          "settings": {
+            "company_name": "Company Three"
+          }
+        },
+        {
+          "type": "company",
+          "settings": {
+            "company_name": "Company Four"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  /* Section Header Styles */
+  .companies-we-work-with__header {
+    margin-bottom: var(--gap-xl);
+  }
+
+  .companies-we-work-with__heading {
+    font-size: 3rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-foreground);
+  }
+
+  .companies-we-work-with__subheading {
+    font-size: var(--font-size-lg);
+    margin: 0;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  @media screen and (max-width: 749px) {
+    .companies-we-work-with__header {
+      margin-bottom: var(--gap-lg);
+    }
+
+    .companies-we-work-with__heading {
+      font-size: 2.5rem;
+    }
+
+    .companies-we-work-with__subheading {
+      font-size: var(--font-size-md);
+    }
+  }
+
+  /* Company Card Styles */
+  .company-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--color-background);
+    border-radius: var(--style-border-radius-inputs);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .company-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Image container - maintains natural aspect ratio */
+  .company-card__image {
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--color-input-background);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 150px;
+  }
+
+  /* Images maintain natural aspect ratio with consistent width */
+  .company-card__image img {
+    width: 100%;
+    height: auto;
+    max-height: {{ section.settings.image_max_height }}px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .company-card__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(var(--color-foreground-rgb), 0.05) 0%, rgba(var(--color-foreground-rgb), 0.1) 100%);
+  }
+
+  .company-card__placeholder-icon {
+    opacity: 0.3;
+    color: var(--color-foreground);
+  }
+
+  .company-card__content {
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    flex: 1;
+    text-align: center;
+  }
+
+  .company-card__name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-foreground);
+  }
+
+  .company-card__description {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  .company-card__description p {
+    margin: 0;
+  }
+
+  .company-card__description p:not(:last-child) {
+    margin-bottom: var(--gap-xs);
+  }
+
+  /* Resource list item wrapper */
+  .company-card-wrapper {
+    container-type: inline-size;
+  }
+
+  /* Responsive adjustments */
+  @media screen and (max-width: 749px) {
+    .company-card__content {
+      padding: var(--padding-md);
+    }
+
+    .company-card__name {
+      font-size: var(--font-size-md);
+    }
+
+    .company-card__image {
+      padding: 1rem;
+    }
+  }
+
+  /* Grid layout specific styles */
+  .resource-list--grid .company-card {
+    border: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  /* Carousel layout specific styles */
+  .resource-list__carousel .company-card {
+    border: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+{% endstylesheet %}
