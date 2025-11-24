@@ -113,6 +113,10 @@
   {% endif %}
 </div>
 
+<div class="cart__disclaimer">
+  {% render 'cart-disclaimer' %}
+</div>
+
 {% stylesheet %}
   .cart-actions {
     display: flex;
@@ -135,5 +139,9 @@
 
   .cart__installments {
     color: var(--color-foreground);
+  }
+
+  .cart__disclaimer {
+    margin-block-start: var(--margin-md);
   }
 {% endstylesheet %}

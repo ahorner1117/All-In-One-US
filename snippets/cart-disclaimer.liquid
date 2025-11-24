@@ -1,0 +1,71 @@
+{% liquid
+  assign ai_gen_id = 'cartdrawer'
+
+  # Default settings for cart drawer
+  assign text_size = 12
+  assign text_color = '#000000'
+  assign link_color = '#000000'
+  assign link_hover_color = '#333333'
+  assign checkbox_color = '#000000'
+  assign checked_by_default = true
+  assign disclaimer_text = '<p>I agree to the <a href="/policies/terms-of-service" title="Terms of Service">terms and conditions</a></p>'
+%}
+
+{% style %}
+  .ai-cart-disclaimer-{{ ai_gen_id }} {
+    padding: 16px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ai-cart-disclaimer__wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 600px;
+  }
+
+  .ai-cart-disclaimer__checkbox-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: {{ checkbox_color }};
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} {
+    flex-grow: 1;
+    font-size: {{ text_size }}px;
+    line-height: 1.5;
+    color: {{ text_color }};
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} a {
+    color: {{ link_color }};
+    text-decoration: underline;
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} a:hover {
+    color: {{ link_hover_color }};
+  }
+{% endstyle %}
+
+<div class="ai-cart-disclaimer-{{ ai_gen_id }}">
+  <div class="ai-cart-disclaimer__wrapper-{{ ai_gen_id }}">
+    <input
+      type="checkbox"
+      id="ai-cart-disclaimer-checkbox-{{ ai_gen_id }}"
+      class="ai-cart-disclaimer__checkbox-{{ ai_gen_id }}"
+      {% if checked_by_default %}checked{% endif %}
+    >
+    <label
+      for="ai-cart-disclaimer-checkbox-{{ ai_gen_id }}"
+      class="ai-cart-disclaimer__label-{{ ai_gen_id }}"
+    >
+      {{ disclaimer_text }}
+    </label>
+  </div>
+</div>

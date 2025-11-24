@@ -1,0 +1,176 @@
+{% doc %}
+  @prompt
+    Create a disclaimer checkbox for the cart using small text, it should be checked by default
+{% enddoc %}
+{% liquid
+  if block.id
+    assign ai_gen_id = block.id | replace: '_', '' | downcase
+  else
+    assign ai_gen_id = 'cartdrawer'
+  endif
+
+  # Set defaults for when rendered without block context
+  if block.settings.text_size
+    assign text_size = block.settings.text_size
+  else
+    assign text_size = 12
+  endif
+
+  if block.settings.text_color
+    assign text_color = block.settings.text_color
+  else
+    assign text_color = '#000000'
+  endif
+
+  if block.settings.link_color
+    assign link_color = block.settings.link_color
+  else
+    assign link_color = '#000000'
+  endif
+
+  if block.settings.link_hover_color
+    assign link_hover_color = block.settings.link_hover_color
+  else
+    assign link_hover_color = '#333333'
+  endif
+
+  if block.settings.checkbox_color
+    assign checkbox_color = block.settings.checkbox_color
+  else
+    assign checkbox_color = '#000000'
+  endif
+
+  if block.settings.checked_by_default != nil
+    assign checked_by_default = block.settings.checked_by_default
+  else
+    assign checked_by_default = true
+  endif
+
+  if block.settings.disclaimer_text
+    assign disclaimer_text = block.settings.disclaimer_text
+  else
+    assign disclaimer_text = '<p>I agree to the <a href="/policies/terms-of-service" title="Terms of Service">terms and conditions</a></p>'
+  endif
+%}
+
+{% style %}
+  .ai-cart-disclaimer-{{ ai_gen_id }} {
+    padding: 16px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ai-cart-disclaimer__wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 600px;
+  }
+
+  .ai-cart-disclaimer__checkbox-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: {{ checkbox_color }};
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} {
+    flex-grow: 1;
+    font-size: {{ text_size }}px;
+    line-height: 1.5;
+    color: {{ text_color }};
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} a {
+    color: {{ link_color }};
+    text-decoration: underline;
+  }
+
+  .ai-cart-disclaimer__label-{{ ai_gen_id }} a:hover {
+    color: {{ link_hover_color }};
+  }
+{% endstyle %}
+
+<div class="ai-cart-disclaimer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-cart-disclaimer__wrapper-{{ ai_gen_id }}">
+    <input
+      type="checkbox"
+      id="ai-cart-disclaimer-checkbox-{{ ai_gen_id }}"
+      class="ai-cart-disclaimer__checkbox-{{ ai_gen_id }}"
+      {% if checked_by_default %}checked{% endif %}
+    >
+    <label
+      for="ai-cart-disclaimer-checkbox-{{ ai_gen_id }}"
+      class="ai-cart-disclaimer__label-{{ ai_gen_id }}"
+    >
+      {{ disclaimer_text }}
+    </label>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart disclaimer",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "<p>I agree to the <a href=\"/policies/terms-of-service\" title=\"Terms of Service\">terms and conditions</a></p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "checked_by_default",
+      "label": "Checked by default",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "checkbox_color",
+      "label": "Checkbox color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart disclaimer"
+    }
+  ]
+}
+{% endschema %}
