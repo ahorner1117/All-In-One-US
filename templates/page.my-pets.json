@@ -75,6 +75,40 @@
         "padding-block-end": 0
       }
     },
+    "pet_signup_stepper_LV6Fpj": {
+      "type": "pet-signup-stepper",
+      "name": "Pet Signup Stepper",
+      "settings": {
+        "main_title": "Add Your Pet!",
+        "main_subtitle": "Choose your pet type to get started with a personalized subscription box",
+        "dog_image": "shopify://shop_images/C3664EF0-F075-48ED-AB4F-51D514FACA13.jpg",
+        "dog_title": "Add Your Dog",
+        "dog_description": "Create a custom box for your canine companion",
+        "cat_image": "shopify://shop_images/DSC06988.jpg",
+        "cat_title": "Add Your Cat",
+        "cat_description": "Create a custom box for your feline friend",
+        "name_question": "What's your pet's name?",
+        "name_help": "We'll make sure all their goodies are labeled just for them!",
+        "birthday_question": "When's [pet_name]'s birthday?",
+        "birthday_help": "We love sending birthday surprises!",
+        "breed_question": "What breed is [pet_name]?",
+        "breed_help": "This helps us customize their box even better",
+        "weight_question": "How much does [pet_name] weigh?",
+        "allergies_question": "Does [pet_name] have any protein allergies?",
+        "boost_question": "What kind of boost does [pet_name] need most?",
+        "review_title": "Almost done! Let's review [pet_name]'s profile",
+        "review_subtitle": "Make sure everything looks good before we create the profile",
+        "auth_title": "Almost there! Let's create your account",
+        "auth_subtitle": "We'll save [pet_name]'s profile to your account so you can manage it anytime, update preferences, and never miss a delivery!",
+        "auth_create_button": "Create Account",
+        "auth_signin_text": "Already have an account? Sign in",
+        "submit_button_text": "Create Pet Profile",
+        "success_message": "Pet profile created successfully!",
+        "color_scheme": "",
+        "padding-block-start": 60,
+        "padding-block-end": 60
+      }
+    },
     "pet-list": {
       "type": "pet-list",
       "settings": {
@@ -92,6 +126,7 @@
   },
   "order": [
     "main",
+    "pet_signup_stepper_LV6Fpj",
     "pet-list"
   ]
 }

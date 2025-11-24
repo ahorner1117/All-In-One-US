@@ -12,6 +12,7 @@
     "logo": "shopify://shop_images/IMG_7980.jpg",
     "logo_height": 60,
     "logo_height_mobile": 35,
+    "favicon": "shopify://shop_images/IMG_7980.jpg",
     "type_body_font": "playfair_n4",
     "type_subheading_font": "inter_n5",
     "type_heading_font": "playfair_n4",

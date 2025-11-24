@@ -16,7 +16,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<p>Welcome to Paw Pack</p>",
+            "text": "<h2>Treat Your Loved Ones This Holiday Season</h2>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -42,11 +42,11 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>A custom box that never gives you Deja chew </p>",
+            "text": "<p>Enhance your pets' happiness with monthly toys customized to their preferences.</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
-            "type_preset": "rte",
+            "type_preset": "paragraph",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -69,7 +69,7 @@
           "name": "t:names.group",
           "settings": {
             "content_direction": "row",
-            "vertical_on_mobile": true,
+            "vertical_on_mobile": false,
             "horizontal_alignment": "flex-start",
             "vertical_alignment": "center",
             "align_baseline": false,
@@ -78,7 +78,7 @@
             "gap": 12,
             "width": "fit-content",
             "custom_width": 100,
-            "width_mobile": "fill",
+            "width_mobile": "custom",
             "custom_width_mobile": 100,
             "height": "fit",
             "custom_height": 100,
@@ -114,8 +114,8 @@
                 "style_class": "button",
                 "width": "fit-content",
                 "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "width_mobile": "custom",
+                "custom_width_mobile": 38
               },
               "blocks": {}
             },
@@ -129,8 +129,8 @@
                 "style_class": "button",
                 "width": "fit-content",
                 "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "width_mobile": "custom",
+                "custom_width_mobile": 38
               },
               "blocks": {}
             }
@@ -150,11 +150,12 @@
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
-        "image_1": "shopify://shop_images/IMG_1705.JPG_1.png",
+        "image_1": "shopify://shop_images/A703D6C7-CD77-4A76-8903-AE389F4D9CD5_1_105_c.jpg",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
+        "custom_mobile_media": true,
         "media_type_1_mobile": "image",
+        "image_1_mobile": "shopify://shop_images/42643661-8E0D-4F45-B5F9-E8B72596C6D4_1_105_c.jpg",
         "media_type_2_mobile": "image",
         "link": "",
         "open_in_new_tab": false,
@@ -185,6 +186,7 @@
       "blocks": {
         "slide_YXn7D3": {
           "type": "_slide",
+          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/DSC07416.jpg",
@@ -296,87 +298,11 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {}
-                },
-                "group_CAR6cb": {
-                  "type": "group",
-                  "name": "t:names.group",
-                  "settings": {
-                    "content_direction": "row",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "center",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "center",
-                    "gap": 12,
-                    "width": "fill",
-                    "custom_width": 100,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "inherit_color_scheme": true,
-                    "color_scheme": "",
-                    "background_media": "none",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_radius": 0,
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "placeholder": "",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "button_N7txDp": {
-                      "type": "button",
-                      "settings": {
-                        "label": "Add Your Pet",
-                        "link": "shopify://pages/my-pets",
-                        "open_in_new_tab": false,
-                        "style_class": "button",
-                        "width": "fit-content",
-                        "custom_width": 100,
-                        "width_mobile": "fit-content",
-                        "custom_width_mobile": 100
-                      },
-                      "blocks": {}
-                    },
-                    "button_XmHHeW": {
-                      "type": "button",
-                      "name": "t:names.button",
-                      "settings": {
-                        "label": "Shop now",
-                        "link": "shopify://collections/all",
-                        "open_in_new_tab": false,
-                        "style_class": "button",
-                        "width": "fit-content",
-                        "custom_width": 100,
-                        "width_mobile": "fit-content",
-                        "custom_width_mobile": 100
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "button_N7txDp",
-                    "button_XmHHeW"
-                  ]
                 }
               },
               "block_order": [
                 "text_7ENemY",
-                "text_We9L9C",
-                "group_CAR6cb"
+                "text_We9L9C"
               ]
             }
           },
@@ -388,7 +314,7 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "shopify://shop_images/IMG_1705.JPG_1.png",
+            "image_1": "shopify://shop_images/A703D6C7-CD77-4A76-8903-AE389F4D9CD5_1_105_c.jpg",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -423,9 +349,9 @@
                 "width": "custom",
                 "custom_width": 50,
                 "width_mobile": "custom",
-                "custom_width_mobile": 74,
+                "custom_width_mobile": 90,
                 "height": "fit",
-                "custom_height": 100,
+                "custom_height": 85,
                 "inherit_color_scheme": false,
                 "color_scheme": "scheme-6",
                 "background_media": "none",
@@ -451,11 +377,11 @@
                 "text_V3tcmn": {
                   "type": "text",
                   "settings": {
-                    "text": "<h2>Non-Stop Fun</h2>",
+                    "text": "<h2>Treat Your Loved Ones This Holiday Season</h2>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "rte",
+                    "type_preset": "h2",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -492,31 +418,92 @@
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
-                    "padding-block-end": 20,
+                    "padding-block-end": 12,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
                   },
                   "blocks": {}
                 },
-                "button_QeTDUg": {
-                  "type": "button",
+                "group_hUTqYN": {
+                  "type": "group",
+                  "name": "t:names.group",
                   "settings": {
-                    "label": "Shop now",
-                    "link": "shopify://collections/all",
-                    "open_in_new_tab": false,
-                    "style_class": "button",
-                    "width": "fit-content",
+                    "content_direction": "row",
+                    "vertical_on_mobile": false,
+                    "horizontal_alignment": "center",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "center",
+                    "gap": 12,
+                    "width": "fill",
                     "custom_width": 100,
-                    "width_mobile": "fit-content",
-                    "custom_width_mobile": 100
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "inherit_color_scheme": true,
+                    "color_scheme": "",
+                    "background_media": "none",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "toggle_overlay": false,
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "link": "",
+                    "open_in_new_tab": false,
+                    "placeholder": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
                   },
-                  "blocks": {}
+                  "blocks": {
+                    "button_N7txDp": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Get Started",
+                        "link": "shopify://pages/my-pets",
+                        "open_in_new_tab": false,
+                        "style_class": "button",
+                        "width": "fit-content",
+                        "custom_width": 38,
+                        "width_mobile": "custom",
+                        "custom_width_mobile": 38
+                      },
+                      "blocks": {}
+                    },
+                    "button_XmHHeW": {
+                      "type": "button",
+                      "name": "t:names.button",
+                      "settings": {
+                        "label": "Shop now",
+                        "link": "shopify://collections/all",
+                        "open_in_new_tab": false,
+                        "style_class": "button",
+                        "width": "fit-content",
+                        "custom_width": 100,
+                        "width_mobile": "custom",
+                        "custom_width_mobile": 38
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "button_N7txDp",
+                    "button_XmHHeW"
+                  ]
                 }
               },
               "block_order": [
                 "text_V3tcmn",
                 "text_ThYNaE",
-                "button_QeTDUg"
+                "group_hUTqYN"
               ]
             }
           },
@@ -548,7 +535,7 @@
         "step_N4jALc": {
           "type": "step",
           "settings": {
-            "emoji": "🐕",
+            "image": "shopify://shop_images/sleeping_dog.png",
             "title": "Tell Us About Your Pet",
             "description": "Answer a few questions about your furry friend's preferences, allergies, and size."
           }
@@ -556,7 +543,7 @@
         "step_thzzCb": {
           "type": "step",
           "settings": {
-            "emoji": "📦",
+            "image": "shopify://shop_images/Add_a_background_like_theyre_sitting_in_a_room.jpg",
             "title": "We Curate Your Box",
             "description": "Our team handpicks toys, treats, and goodies personalized just for your pet."
           }
@@ -564,7 +551,7 @@
         "step_XXjHWi": {
           "type": "step",
           "settings": {
-            "emoji": "🚚",
+            "image": "shopify://shop_images/Animated_happy_dog_opening_box_of_toys_56b686fe-5af1-4318-aec4-3d7e5d61ce67.jpg",
             "title": "Delivered Monthly",
             "description": "Get excited! Your customized box arrives right to your doorstep every month."
           }
@@ -580,10 +567,11 @@
         "heading": "How It Works",
         "subheading": "Get started in three easy steps",
         "button_label": "Get Started",
-        "button_link": "",
+        "logged_in_button_label": "Manage My Pets",
+        "section_width": "page-width",
         "color_scheme": "scheme-3",
-        "padding-block-start": 60,
-        "padding-block-end": 60
+        "padding-block-start": 24,
+        "padding-block-end": 24
       }
     },
     "pet_signup_stepper_main": {
@@ -614,7 +602,7 @@
         "auth_signin_text": "Already have an account? Sign in",
         "submit_button_text": "Create Pet Profile",
         "success_message": "Pet profile created successfully!",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding-block-start": 60,
         "padding-block-end": 60
       }
@@ -627,7 +615,7 @@
           "settings": {
             "image": "shopify://shop_images/A703D6C7-CD77-4A76-8903-AE389F4D9CD5_1_105_c.jpg",
             "link": "",
-            "image_ratio": "square",
+            "image_ratio": "adapt",
             "width": "fill",
             "custom_width": 100,
             "width_mobile": "fill",
@@ -771,7 +759,7 @@
         "vertical_alignment_flex_direction_column": "center",
         "gap": 32,
         "section_width": "page-width",
-        "section_height": "",
+        "section_height": "small",
         "section_height_custom": 50,
         "color_scheme": "scheme-3",
         "background_media": "none",
@@ -862,7 +850,7 @@
         "icons_style": "arrow",
         "icons_shape": "circle",
         "section_width": "page-width",
-        "gap": 48,
+        "gap": 0,
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
