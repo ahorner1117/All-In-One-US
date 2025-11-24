@@ -13,12 +13,11 @@
       {% render 'spacing-style', settings: section.settings %}
     "
   >
-    {% if customer %}
     <pet-profile-form
       class="pet-profile-form"
       section-id="{{ section.id }}"
-      customer-logged-in="true"
-      customer-id="{{ customer.id }}"
+      customer-logged-in="{% if customer %}true{% else %}false{% endif %}"
+      {% if customer %}customer-id="{{ customer.id }}"{% endif %}
     >
       <div class="pet-profile-form__success" ref="successMessage" hidden>
         {{- 'icon-checkmark.svg' | inline_asset_content -}}
@@ -210,24 +209,6 @@
         </button>
       </form>
     </pet-profile-form>
-    {% else %}
-    <!-- Login Required Message -->
-    <div class="pet-profile-form__login-required">
-      <div class="login-required__icon">
-        🔒
-      </div>
-      <h2 class="login-required__title">{{ section.settings.login_title | default: 'Sign In Required' }}</h2>
-      <p class="login-required__message">{{ section.settings.login_message | default: 'Please sign in to your account to create and manage your pet profiles.' }}</p>
-      <div class="login-required__actions">
-        <a href="/account/login?return_url={{ request.path | url_encode }}" class="button button--primary">
-          {{ section.settings.login_button_text | default: 'Sign In' }}
-        </a>
-        <a href="/account/register?return_url={{ request.path | url_encode }}" class="button button--secondary">
-          {{ section.settings.register_button_text | default: 'Create Account' }}
-        </a>
-      </div>
-    </div>
-    {% endif %}
   </div>
 </div>
 

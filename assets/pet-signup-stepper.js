@@ -8,15 +8,122 @@ export class PetSignupStepper extends Component {
   constructor() {
     super();
     this.currentStep = 1;
-    this.totalSteps = 7;
     this.petName = '';
     this.petType = '';
     this.formData = {};
   }
 
+  /**
+   * Get total steps based on login status
+   * @returns {number} Total steps in the form
+   */
+  get totalSteps() {
+    const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
+    return isLoggedIn ? 7 : 8;
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.setupEventListeners();
+
+    // Check if user returned from authentication
+    this.handleAuthenticationReturn();
+  }
+
+  /**
+   * Handle user returning from authentication
+   */
+  async handleAuthenticationReturn() {
+    // Check if we have the pet_signup URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPetSignupReturn = urlParams.get('pet_signup') === 'true';
+
+    if (!isPetSignupReturn) return;
+
+    console.log('🔄 Pet signup return detected, initializing auto-submit...');
+
+    // Add a small delay to ensure DOM and attributes are fully ready
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // Check if user is now logged in
+    const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
+    const customerId = this.getAttribute('customer-id');
+
+    console.log('📊 Authentication status:', {
+      isLoggedIn,
+      hasCustomerId: !!customerId,
+      customerIdPreview: customerId ? `${customerId.substring(0, 20)}...` : 'null'
+    });
+
+    if (!isLoggedIn) {
+      console.error('❌ User returned but not logged in. Attributes:', {
+        'customer-logged-in': this.getAttribute('customer-logged-in'),
+        'customer-id': this.getAttribute('customer-id')
+      });
+      this.showError('Authentication failed. Please sign in and try again.');
+      this.showRetryButton();
+      return;
+    }
+
+    if (!customerId || customerId === 'null' || customerId === '') {
+      console.error('❌ Customer ID is missing or invalid:', customerId);
+      this.showError('We couldn\'t retrieve your account information. Please refresh and try again.');
+      this.showRetryButton();
+      return;
+    }
+
+    // Load saved data
+    const savedData = this.loadFormDataFromSession();
+    if (!savedData) {
+      console.warn('⚠️ No saved pet signup data found in session');
+      this.showError('Your form data was not found. Please fill out the form again.');
+      return;
+    }
+
+    console.log('✅ Saved data loaded successfully:', {
+      petType: savedData.petType,
+      petName: savedData.petName,
+      hasFormData: !!savedData.formData
+    });
+
+    // Hide pet type selection and show stepper form
+    if (this.refs.petTypeSelection) {
+      this.refs.petTypeSelection.hidden = true;
+    }
+
+    if (this.refs.stepperForm) {
+      this.refs.stepperForm.hidden = false;
+    }
+
+    // Populate form with saved data
+    this.populateFormFields(savedData);
+
+    console.log('📝 Form populated, attempting auto-submit...');
+
+    // Auto-submit the form
+    try {
+      await this.handleSubmit();
+
+      // Clear session data after successful submission
+      this.clearFormDataFromSession();
+
+      console.log('✅ Pet profile successfully submitted and session data cleared');
+
+      // Clean up URL (remove pet_signup parameter)
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    } catch (error) {
+      console.error('❌ Auto-submit failed:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack
+      });
+
+      this.showError(`Failed to create pet profile: ${error.message}`);
+      this.showRetryButton();
+
+      // Don't clear session data so user can retry
+    }
   }
 
   setupEventListeners() {
@@ -60,6 +167,23 @@ export class PetSignupStepper extends Component {
         this.handleSubmit();
       });
     }
+
+    // Authentication step buttons (Step 8 for non-logged-in users)
+    if (this.refs.createAccountButton) {
+      this.refs.createAccountButton.addEventListener('click', () => {
+        this.handleAuthenticationRedirect();
+      });
+    }
+
+    if (this.refs.signInLink) {
+      this.refs.signInLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Save data and redirect to login instead of register
+        this.saveFormDataToSession();
+        const returnUrl = encodeURIComponent(window.location.pathname + '?pet_signup=true');
+        window.location.href = `/account/login?return_url=${returnUrl}`;
+      });
+    }
   }
 
   /**
@@ -67,16 +191,6 @@ export class PetSignupStepper extends Component {
    * @param {string} type - 'dog' or 'cat'
    */
   selectPetType(type) {
-    // Check if customer is logged in
-    const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
-
-    if (!isLoggedIn) {
-      // Redirect to login page with return URL
-      const returnUrl = encodeURIComponent(window.location.pathname);
-      window.location.href = `/account/login?return_url=${returnUrl}`;
-      return;
-    }
-
     this.petType = type;
 
     // Hide pet type selection and show stepper form
@@ -242,8 +356,9 @@ export class PetSignupStepper extends Component {
     // Update buttons
     this.updateButtons();
 
-    // If on review step, generate summary
-    if (this.currentStep === this.totalSteps) {
+    // Generate review summary on step 7 (review step)
+    const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
+    if (this.currentStep === 7) {
       this.generateReviewSummary();
     }
 
@@ -297,19 +412,32 @@ export class PetSignupStepper extends Component {
    * Update button visibility
    */
   updateButtons() {
+    const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
+
     // Back button - show if not on first step
     if (this.refs.backButton) {
       this.refs.backButton.hidden = this.currentStep === 1;
     }
 
-    // Next button - hide on last step
-    if (this.refs.nextButton) {
-      this.refs.nextButton.hidden = this.currentStep === this.totalSteps;
-    }
+    // For logged-in users: totalSteps = 7 (review is last step with submit)
+    // For non-logged-in users: totalSteps = 8 (step 7 = review with next, step 8 = auth with custom buttons)
 
-    // Submit button - show on last step
-    if (this.refs.submitButton) {
-      this.refs.submitButton.hidden = this.currentStep !== this.totalSteps;
+    if (isLoggedIn) {
+      // Logged in: Show submit on step 7 (review)
+      if (this.refs.nextButton) {
+        this.refs.nextButton.hidden = this.currentStep === 7;
+      }
+      if (this.refs.submitButton) {
+        this.refs.submitButton.hidden = this.currentStep !== 7;
+      }
+    } else {
+      // Not logged in: Show next through step 7, hide both on step 8 (custom buttons)
+      if (this.refs.nextButton) {
+        this.refs.nextButton.hidden = this.currentStep === 8;
+      }
+      if (this.refs.submitButton) {
+        this.refs.submitButton.hidden = true; // Never show submit for non-logged-in users
+      }
     }
   }
 
@@ -468,8 +596,29 @@ export class PetSignupStepper extends Component {
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
     const customerId = this.getAttribute('customer-id');
 
+    console.log('🚀 submitPetData called with:', {
+      isLoggedIn,
+      hasCustomerId: !!customerId,
+      customerIdLength: customerId ? customerId.length : 0,
+      petDataKeys: Object.keys(petData)
+    });
+
     if (!isLoggedIn) {
+      console.error('❌ Login check failed:', {
+        'customer-logged-in': this.getAttribute('customer-logged-in')
+      });
       throw new Error('You must be logged in to create a pet profile.');
+    }
+
+    if (!customerId || customerId === 'null' || customerId === '' || customerId === 'undefined') {
+      console.error('❌ Customer ID validation failed:', {
+        customerId,
+        type: typeof customerId,
+        isNull: customerId === null,
+        isEmpty: customerId === '',
+        isStringNull: customerId === 'null'
+      });
+      throw new Error('Customer ID is missing. Please refresh the page and try again.');
     }
 
     const payload = {
@@ -477,8 +626,19 @@ export class PetSignupStepper extends Component {
       pet_data: petData
     };
 
-    console.log('Submitting pet data for customer:', customerId);
-    console.log('Payload:', JSON.stringify(payload, null, 2));
+    console.log('📦 Submitting pet data for customer:', customerId.substring(0, 30) + '...');
+    console.log('📦 Payload structure:', {
+      customer_id: customerId.substring(0, 30) + '...',
+      pet_data: {
+        name: petData.name,
+        type: petData.type,
+        hasBreed: !!petData.breed,
+        hasBirthday: !!petData.birthday,
+        weight: petData.weight,
+        allergiesCount: petData.allergies?.length || 0,
+        health_boost: petData.health_boost
+      }
+    });
 
     // Submit to Shopify app endpoint to create metaobject
     try {
@@ -586,6 +746,180 @@ export class PetSignupStepper extends Component {
     if (this.refs.errorMessage) {
       this.refs.errorMessage.hidden = true;
     }
+
+    // Also hide retry button if it exists
+    if (this.refs.retryButton) {
+      this.refs.retryButton.hidden = true;
+    }
+  }
+
+  /**
+   * Show retry button for failed auto-submit
+   */
+  showRetryButton() {
+    // Create retry button if it doesn't exist
+    if (!this.refs.retryButton) {
+      const retryButton = document.createElement('button');
+      retryButton.setAttribute('ref', 'retryButton');
+      retryButton.className = 'button button--primary retry-button';
+      retryButton.textContent = 'Try Submitting Again';
+      retryButton.style.marginTop = 'var(--gap-md)';
+      retryButton.style.width = '100%';
+
+      retryButton.addEventListener('click', async () => {
+        console.log('🔄 Manual retry triggered');
+        this.hideMessages();
+
+        try {
+          await this.handleSubmit();
+
+          // Clear session data after successful submission
+          this.clearFormDataFromSession();
+
+          // Clean up URL
+          const cleanUrl = window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+        } catch (error) {
+          console.error('❌ Manual retry failed:', error);
+          this.showError(`Failed to create pet profile: ${error.message}`);
+          // Keep retry button visible
+        }
+      });
+
+      // Insert after error message
+      if (this.refs.errorMessage && this.refs.errorMessage.parentNode) {
+        this.refs.errorMessage.parentNode.insertBefore(
+          retryButton,
+          this.refs.errorMessage.nextSibling
+        );
+      }
+    } else {
+      this.refs.retryButton.hidden = false;
+    }
+  }
+
+  /**
+   * Save form data to localStorage before authentication redirect
+   * Using localStorage instead of sessionStorage for better persistence across OAuth redirects
+   */
+  saveFormDataToSession() {
+    const formData = new FormData(this.refs.form);
+    const petData = this.getFormData(formData);
+
+    const sessionData = {
+      petType: this.petType,
+      petName: this.petName,
+      formData: petData,
+      timestamp: Date.now(),
+      currentStep: this.currentStep
+    };
+
+    localStorage.setItem('pet_signup_pending_data', JSON.stringify(sessionData));
+    console.log('💾 Pet signup data saved to localStorage:', sessionData);
+  }
+
+  /**
+   * Load form data from localStorage after authentication
+   * @returns {Object|null} Saved form data or null if not found
+   */
+  loadFormDataFromSession() {
+    const savedData = localStorage.getItem('pet_signup_pending_data');
+    if (!savedData) return null;
+
+    try {
+      const data = JSON.parse(savedData);
+
+      // Check if data is too old (> 1 hour)
+      const oneHour = 60 * 60 * 1000;
+      if (Date.now() - data.timestamp > oneHour) {
+        console.warn('⚠️ Saved pet signup data is too old, clearing...');
+        this.clearFormDataFromSession();
+        return null;
+      }
+
+      return data;
+    } catch (e) {
+      console.error('Error parsing saved pet signup data:', e);
+      this.clearFormDataFromSession();
+      return null;
+    }
+  }
+
+  /**
+   * Clear form data from localStorage
+   */
+  clearFormDataFromSession() {
+    localStorage.removeItem('pet_signup_pending_data');
+    console.log('🗑️ Pet signup session data cleared');
+  }
+
+  /**
+   * Populate form fields with saved data
+   * @param {Object} savedData - The saved form data
+   */
+  populateFormFields(savedData) {
+    if (!savedData || !this.refs.form) return;
+
+    const { petType, petName, formData } = savedData;
+
+    // Set pet type and name
+    this.petType = petType;
+    this.petName = petName;
+
+    // Populate form fields
+    const form = this.refs.form;
+
+    if (formData.name) {
+      const nameInput = form.querySelector('input[name="pet_name"]');
+      if (nameInput) nameInput.value = formData.name;
+    }
+
+    if (formData.birthday) {
+      const birthdayInput = form.querySelector('input[name="pet_birthday"]');
+      if (birthdayInput) birthdayInput.value = formData.birthday;
+    }
+
+    if (formData.breed) {
+      const breedInput = form.querySelector('input[name="pet_breed"]');
+      if (breedInput) breedInput.value = formData.breed;
+    }
+
+    if (formData.weight) {
+      const weightInput = form.querySelector(`input[name="pet_weight"][value="${formData.weight}"]`);
+      if (weightInput) weightInput.checked = true;
+    }
+
+    if (formData.allergies && formData.allergies.length > 0) {
+      formData.allergies.forEach(allergy => {
+        const allergyInput = form.querySelector(`input[name="allergies"][value="${allergy}"]`);
+        if (allergyInput) allergyInput.checked = true;
+      });
+    }
+
+    if (formData.health_boost) {
+      const boostInput = form.querySelector(`input[name="health_boost"][value="${formData.health_boost}"]`);
+      if (boostInput) boostInput.checked = true;
+    }
+
+    // Update weight options based on pet type
+    this.updateWeightOptions(petType);
+
+    // Update dynamic text
+    this.updateDynamicText(petName);
+
+    console.log('✅ Form fields populated with saved data');
+  }
+
+  /**
+   * Handle authentication redirect for non-logged-in users
+   */
+  handleAuthenticationRedirect() {
+    // Save current form data
+    this.saveFormDataToSession();
+
+    // Redirect to registration page with return URL
+    const returnUrl = encodeURIComponent(window.location.pathname + '?pet_signup=true');
+    window.location.href = `/account/register?return_url=${returnUrl}`;
   }
 }
 

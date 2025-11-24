@@ -65,5 +65,12 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {%- comment -%}Pet profile completion handler - auto-submits pending pet profiles after login{%- endcomment -%}
+    <script src="{{ 'pet-profile-completion.js' | asset_url }}" type="module" defer></script>
+    <pet-profile-completion
+      customer-logged-in="{% if customer %}true{% else %}false{% endif %}"
+      {% if customer %}customer-id="{{ customer.id }}"{% endif %}
+    ></pet-profile-completion>
   </body>
 </html>

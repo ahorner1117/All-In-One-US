@@ -209,7 +209,9 @@ export class PetProfileForm extends Component {
     const customerId = this.getAttribute('customer-id');
 
     if (!isLoggedIn) {
-      throw new Error('You must be logged in to create a pet profile.');
+      // Save to localStorage and redirect to login
+      this.savePendingPetData(petData);
+      throw new Error('Please sign in to complete your pet profile. Your information has been saved.');
     }
 
     const payload = {
@@ -292,6 +294,25 @@ export class PetProfileForm extends Component {
     localStorage.setItem('customer_pets', JSON.stringify(pets));
     console.log('💾 Pet cached to localStorage:', newPet);
     return newPet;
+  }
+
+  /**
+   * Save pending pet data when user is not logged in
+   * @param {Object} petData
+   */
+  savePendingPetData(petData) {
+    const pendingData = {
+      pet_data: petData,
+      timestamp: new Date().toISOString(),
+      return_url: window.location.href
+    };
+    localStorage.setItem('pending_pet_profile', JSON.stringify(pendingData));
+    console.log('💾 Saved pending pet profile to localStorage');
+
+    // Redirect to login after a short delay to allow error message to show
+    setTimeout(() => {
+      window.location.href = `/account/login?return_url=${encodeURIComponent(window.location.pathname)}`;
+    }, 2000);
   }
 
   /**

@@ -542,6 +542,50 @@
         "padding-block-end": 0
       }
     },
+    "how_it_works_BTLq3r": {
+      "type": "how-it-works",
+      "blocks": {
+        "step_N4jALc": {
+          "type": "step",
+          "settings": {
+            "emoji": "🐕",
+            "title": "Tell Us About Your Pet",
+            "description": "Answer a few questions about your furry friend's preferences, allergies, and size."
+          }
+        },
+        "step_thzzCb": {
+          "type": "step",
+          "settings": {
+            "emoji": "📦",
+            "title": "We Curate Your Box",
+            "description": "Our team handpicks toys, treats, and goodies personalized just for your pet."
+          }
+        },
+        "step_XXjHWi": {
+          "type": "step",
+          "settings": {
+            "emoji": "🚚",
+            "title": "Delivered Monthly",
+            "description": "Get excited! Your customized box arrives right to your doorstep every month."
+          }
+        }
+      },
+      "block_order": [
+        "step_N4jALc",
+        "step_thzzCb",
+        "step_XXjHWi"
+      ],
+      "name": "How It Works",
+      "settings": {
+        "heading": "How It Works",
+        "subheading": "Get started in three easy steps",
+        "button_label": "Get Started",
+        "button_link": "",
+        "color_scheme": "scheme-3",
+        "padding-block-start": 60,
+        "padding-block-end": 60
+      }
+    },
     "pet_signup_stepper_main": {
       "type": "pet-signup-stepper",
       "settings": {
@@ -564,6 +608,10 @@
         "boost_question": "What kind of boost does [pet_name] need most?",
         "review_title": "Almost done! Let's review [pet_name]'s profile",
         "review_subtitle": "Make sure everything looks good before we create the profile",
+        "auth_title": "Almost there! Let's create your account",
+        "auth_subtitle": "We'll save [pet_name]'s profile to your account so you can manage it anytime, update preferences, and never miss a delivery!",
+        "auth_create_button": "Create Account",
+        "auth_signin_text": "Already have an account? Sign in",
         "submit_button_text": "Create Pet Profile",
         "success_message": "Pet profile created successfully!",
         "color_scheme": "scheme-1",
@@ -571,23 +619,43 @@
         "padding-block-end": 60
       }
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "section_pcXFNb": {
+      "type": "section",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "image_JpYBXF": {
+          "type": "image",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
+            "image": "shopify://shop_images/A703D6C7-CD77-4A76-8903-AE389F4D9CD5_1_105_c.jpg",
+            "link": "",
+            "image_ratio": "square",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_RikNU3": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
-            "width": "fill",
+            "width": "custom",
             "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
@@ -602,23 +670,30 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
+            "text_nnCHGK": {
+              "type": "text",
+              "name": "t:names.heading",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h2><strong>Holiday Joy in Every Box</strong></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h3",
+                "type_preset": "h2",
                 "font": "var(--font-body--family)",
-                "font_size": "",
+                "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -634,65 +709,11 @@
               },
               "blocks": {}
             },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
+            "text_YyGbFq": {
+              "type": "text",
               "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
+                "text": "<p>Delight your pet this season with a Paw In One subscription box—filled with premium toys, wholesome treats, and festive surprises, curated just for them. Give your best friend more reasons to wag their tail, month after month.</p>",
                 "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "rte",
@@ -706,64 +727,66 @@
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "button_PyQjzy": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Paw In One & Share the Joy",
+                "link": "shopify://pages/my-pets",
+                "open_in_new_tab": false,
+                "style_class": "button",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
+            "text_nnCHGK",
+            "text_YyGbFq",
+            "button_PyQjzy"
           ]
         }
       },
-      "disabled": true,
-      "name": "Featured collection",
+      "block_order": [
+        "image_JpYBXF",
+        "group_RikNU3"
+      ],
+      "name": "t:names.image_with_text",
       "settings": {
-        "collection": "all",
-        "layout_type": "carousel",
-        "carousel_on_mobile": true,
-        "max_products": 4,
-        "columns": 3,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
+        "content_direction": "row",
+        "vertical_on_mobile": true,
         "horizontal_alignment": "flex-start",
-        "gap": 28,
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
         "color_scheme": "scheme-3",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 40,
+        "padding-block-end": 40
       }
     },
     "meet_the_team_gpmYyx": {
@@ -778,15 +801,6 @@
             "description": "<p>Lola is the CEO of PawPack, personally ensuring that every luxury pet box meets her high standards. This is her passion project, delivering luxury pet experiences around the globe while providing support to shelters and pet sanctuaries through volunteer work and donations from every subscription box. She’s brought on her human assistant, Josh Rojas, to handle daily tasks and logistics, along with the occasional belly rubs during her very busy schedule. </p>"
           }
         },
-        "team_member_HQnqLX": {
-          "type": "team_member",
-          "settings": {
-            "image": "shopify://shop_images/1406247F-3890-446F-AE89-5686FDB8C92F_1_201_a.jpg",
-            "name": "Toby",
-            "position": "Marketing Director",
-            "description": "<p>My name’s Toby, Paw In One’s Marketing Director (but most call me the Barketing Director). I’m in charge of all things social media — and I’ve appointed Tatum as my assistant to handle the important stuff: car rides, photoshoots, and the egg out of her breakfast sandwich</p>"
-          }
-        },
         "team_member_fq9dCP": {
           "type": "team_member",
           "settings": {
@@ -796,10 +810,21 @@
             "description": "<p>Tejas is our CFO. He is constantly running around building relationships and ensuring that we maintain our high standards and integrity for a successful business. He has brought on Kristen Suggs-Bohrer as his emotional support human. She never leaves his side and handles his high quality and stringent meals that ensure he gets the energy and supplements for peak performance. In his spare time he enjoys traveling to horse shows and watching his human compete. </p>"
           }
         },
+        "team_member_HQnqLX": {
+          "type": "team_member",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/1406247F-3890-446F-AE89-5686FDB8C92F_1_201_a.jpg",
+            "name": "Toby",
+            "position": "Marketing Director",
+            "description": "<p>My name’s Toby, Paw In One’s Marketing Director (but most call me the Barketing Director). I’m in charge of all things social media — and I’ve appointed Tatum as my assistant to handle the important stuff: car rides, photoshoots, and the egg out of her breakfast sandwich</p>"
+          }
+        },
         "team_member_kHJ4tL": {
           "type": "team_member",
+          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/IMG_8298.png",
+            "image": "shopify://shop_images/IMG_1858.jpg",
             "name": "Sabre",
             "position": "Medical Director",
             "description": "<p>Sabre here! I am the Medical Director at Paw In One. With a background as a Veterinary Technician I hand pick the best products that are both delicious and beneficial, with the help of my mom, Payton. My favorite past times are talking back and being tucked in every night. I may look big and scary but really I'm big hearted, and I prefer to spend my time with my tiny human. </p>"
@@ -807,6 +832,7 @@
         },
         "team_member_w8HBJ9": {
           "type": "team_member",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/IMG_8237.png",
             "name": "Bella",
@@ -817,8 +843,8 @@
       },
       "block_order": [
         "team_member_tcNrMc",
-        "team_member_HQnqLX",
         "team_member_fq9dCP",
+        "team_member_HQnqLX",
         "team_member_kHJ4tL",
         "team_member_w8HBJ9"
       ],
@@ -826,9 +852,87 @@
       "settings": {
         "heading": "Meet the Team",
         "heading_alignment": "center",
-        "layout_type": "carousel",
+        "layout_type": "grid",
         "carousel_on_mobile": true,
-        "columns": 4,
+        "columns": 2,
+        "mobile_columns": "1",
+        "mobile_card_size": "70cqw",
+        "columns_gap": 48,
+        "rows_gap": 16,
+        "icons_style": "arrow",
+        "icons_shape": "circle",
+        "section_width": "page-width",
+        "gap": 48,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "meet_the_team_hirDmX": {
+      "type": "meet-the-team",
+      "blocks": {
+        "team_member_nnnUm6": {
+          "type": "team_member",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/IMG_8229_a8fe8f5e-d0ac-4263-becd-30a4a704a06a.png",
+            "name": "Lola",
+            "position": "CEO",
+            "description": "<p>Lola is the CEO of PawPack, personally ensuring that every luxury pet box meets her high standards. This is her passion project, delivering luxury pet experiences around the globe while providing support to shelters and pet sanctuaries through volunteer work and donations from every subscription box. She’s brought on her human assistant, Josh Rojas, to handle daily tasks and logistics, along with the occasional belly rubs during her very busy schedule. </p>"
+          }
+        },
+        "team_member_WChBk6": {
+          "type": "team_member",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/IMG_6499_PNG.png",
+            "name": "Tejas",
+            "position": "CFO",
+            "description": "<p>Tejas is our CFO. He is constantly running around building relationships and ensuring that we maintain our high standards and integrity for a successful business. He has brought on Kristen Suggs-Bohrer as his emotional support human. She never leaves his side and handles his high quality and stringent meals that ensure he gets the energy and supplements for peak performance. In his spare time he enjoys traveling to horse shows and watching his human compete. </p>"
+          }
+        },
+        "team_member_yD7Wg9": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1858.jpg",
+            "name": "Sabre",
+            "position": "Medical Director",
+            "description": "<p>Sabre here! I am the Medical Director at Paw In One. With a background as a Veterinary Technician I hand pick the best products that are both delicious and beneficial, with the help of my mom, Payton. My favorite past times are talking back and being tucked in every night. I may look big and scary but really I'm big hearted, and I prefer to spend my time with my tiny human. </p>"
+          }
+        },
+        "team_member_kzDdK9": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8237.png",
+            "name": "Bella",
+            "position": "Head of Security",
+            "description": "<p>Tank is our head of security. He takes pride in patrolling the perimeter, and meeting everyone that comes to our facility to ensure the safety of our team. Although he tends to take naps on the job he never misses the opportunity to get vocal with every small noise. He’s a lone wolf but a social butterfly. </p>"
+          }
+        },
+        "team_member_Ak9exT": {
+          "type": "team_member",
+          "settings": {
+            "image": "shopify://shop_images/1406247F-3890-446F-AE89-5686FDB8C92F_1_201_a.jpg",
+            "name": "Toby",
+            "position": "Marketing Director",
+            "description": "<p>My name’s Toby, Paw In One’s Marketing Director (but most call me the Barketing Director). I’m in charge of all things social media — and I’ve appointed Tatum as my assistant to handle the important stuff: car rides, photoshoots, and the egg out of her breakfast sandwich</p>"
+          }
+        }
+      },
+      "block_order": [
+        "team_member_nnnUm6",
+        "team_member_WChBk6",
+        "team_member_yD7Wg9",
+        "team_member_kzDdK9",
+        "team_member_Ak9exT"
+      ],
+      "name": "Meet the Team",
+      "settings": {
+        "heading": "",
+        "heading_alignment": "center",
+        "layout_type": "grid",
+        "carousel_on_mobile": true,
+        "columns": 3,
         "mobile_columns": "1",
         "mobile_card_size": "70cqw",
         "columns_gap": 16,
@@ -837,9 +941,9 @@
         "icons_shape": "circle",
         "section_width": "page-width",
         "gap": 24,
-        "color_scheme": "scheme-3",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 24
       }
     },
     "section_YHKNiE": {
@@ -1077,14 +1181,160 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "featured_blog_posts_Nty4VF": {
+      "type": "featured-blog-posts",
+      "blocks": {
+        "static-blog-title": {
+          "type": "_featured-blog-posts-title",
+          "name": "t:names.title",
+          "static": true,
+          "settings": {
+            "text": "<h3>{{ closest.blog.title }}</h3>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "static-blog-post-card": {
+          "type": "_featured-blog-posts-card",
+          "name": "t:names.blog_card",
+          "static": true,
+          "settings": {
+            "alignment": "left",
+            "gap": 8,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "image": {
+              "type": "_featured-blog-posts-image",
+              "static": true,
+              "settings": {
+                "image_ratio": "square",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0
+              },
+              "blocks": {}
+            },
+            "title": {
+              "type": "_heading",
+              "name": "t:names.title",
+              "static": true,
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "text": "<h4>{{ closest.article.title }}</h4>",
+                "read_only": false,
+                "alignment": "left",
+                "show_alignment": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "blog-post-info-text": {
+              "type": "_blog-post-info-text",
+              "name": "t:names.details",
+              "static": true,
+              "settings": {
+                "show_date": true,
+                "show_author": true,
+                "type_preset": "",
+                "alignment": "left",
+                "show_alignment": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "blog-post-description": {
+              "type": "_blog-post-description",
+              "name": "t:names.excerpt",
+              "static": true,
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "padding-block-start": 8,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
+      "disabled": true,
+      "name": "t:names.blog_posts_editorial",
+      "settings": {
+        "blog": "treat-your-pet-to-the-ultimate-holiday-surprise",
+        "layout_type": "editorial",
+        "carousel_on_mobile": false,
+        "post_limit": 2,
+        "columns": 3,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 16,
+        "rows_gap": 16,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "gap": 64,
+        "color_scheme": "",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
     "slideshow_dNPFDn",
+    "how_it_works_BTLq3r",
     "pet_signup_stepper_main",
-    "product_list_fa6P9H",
+    "section_pcXFNb",
     "meet_the_team_gpmYyx",
-    "section_YHKNiE"
+    "meet_the_team_hirDmX",
+    "section_YHKNiE",
+    "featured_blog_posts_Nty4VF"
   ]
 }
