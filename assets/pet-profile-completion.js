@@ -96,47 +96,94 @@ export class PetProfileCompletion extends Component {
    * Submit pet profile to the API
    * @param {string} customerId - Customer ID
    * @param {Object} petData - Pet profile data
+   * @param {string} imageDataUrl - Optional base64 image data URL
    */
-  async submitPetProfile(customerId, petData) {
-    const payload = {
-      customer_id: customerId,
-      pet_data: petData
-    };
-
+  async submitPetProfile(customerId, petData, imageDataUrl = null) {
     console.log('Submitting pending pet profile...');
-    console.log('Payload:', JSON.stringify(payload, null, 2));
+    console.log('Pet data:', petData);
+    console.log('Has image:', !!imageDataUrl);
 
-    const response = await fetch('https://pet-profile-app.vercel.app/apps/pet-profile/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+    // If there's an image, convert to FormData for multipart upload
+    if (imageDataUrl) {
+      const formData = new FormData();
+      formData.append('customer_id', customerId);
+      formData.append('pet_data', JSON.stringify(petData));
 
-    if (!response.ok) {
-      const responseText = await response.text();
-      let errorMessage = 'Failed to save pet profile';
-
+      // Convert base64 data URL to Blob
       try {
-        const errorData = JSON.parse(responseText);
-        errorMessage = errorData.error || errorMessage;
-      } catch (e) {
-        if (responseText) {
-          errorMessage = `Server error (${response.status}): ${responseText.substring(0, 100)}`;
-        } else {
-          errorMessage = `Server returned ${response.status} ${response.statusText}`;
-        }
+        const blob = await this.dataURLtoBlob(imageDataUrl);
+        formData.append('pet_image', blob, `${petData.name || 'pet'}-photo.jpg`);
+      } catch (error) {
+        console.warn('⚠️ Failed to process image, submitting without it:', error);
       }
 
-      throw new Error(errorMessage);
+      const response = await fetch('https://pet-profile-app.vercel.app/apps/pet-profile/create', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = 'Failed to save pet profile';
+
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          errorMessage = `Server error (${response.status})`;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      console.log('✅ Pet profile saved with image:', result);
+      return result;
+
+    } else {
+      // No image - send as JSON
+      const payload = {
+        customer_id: customerId,
+        pet_data: petData
+      };
+
+      const response = await fetch('https://pet-profile-app.vercel.app/apps/pet-profile/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = 'Failed to save pet profile';
+
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          errorMessage = `Server error (${response.status})`;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      console.log('✅ Pet profile saved:', result);
+      return result;
     }
+  }
 
-    const result = await response.json();
-    console.log('✅ Pet profile saved:', result);
-
-    return result;
+  /**
+   * Convert base64 data URL to Blob
+   * @param {string} dataURL - Base64 data URL
+   * @returns {Promise<Blob>}
+   */
+  async dataURLtoBlob(dataURL) {
+    const response = await fetch(dataURL);
+    return await response.blob();
   }
 
   /**
@@ -153,7 +200,7 @@ export class PetProfileCompletion extends Component {
 
     try {
       const pendingData = JSON.parse(pendingDataStr);
-      const { petType, petName, formData, processing } = pendingData;
+      const { petType, petName, formData, imageDataUrl, processing } = pendingData;
 
       // Prevent double submission if already processing
       if (processing) {
@@ -176,7 +223,7 @@ export class PetProfileCompletion extends Component {
       }
 
       console.log('🐾 Found pending pet stepper data! Auto-submitting for customer:', customerId);
-      console.log('Pet data:', { petType, petName, formData });
+      console.log('Pet data:', { petType, petName, formData, hasImage: !!imageDataUrl });
 
       // Mark as processing to prevent double submission
       pendingData.processing = true;
@@ -191,8 +238,8 @@ export class PetProfileCompletion extends Component {
         type: petType
       };
 
-      // Submit the pet profile
-      await this.submitPetProfile(customerId, completePetData);
+      // Submit the pet profile with image if available
+      await this.submitPetProfile(customerId, completePetData, imageDataUrl);
 
       // Clear pending data after successful submission
       localStorage.removeItem('pet_signup_pending_data');

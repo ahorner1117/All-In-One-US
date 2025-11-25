@@ -240,6 +240,32 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
+  .pet-card__image-container {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--style-border-radius-inputs);
+    overflow: hidden;
+    margin-bottom: var(--gap-md);
+  }
+
+  .pet-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pet-card__placeholder-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    background: linear-gradient(135deg,
+      rgba(var(--color-primary-rgb, 0, 0, 0), 0.1) 0%,
+      rgba(var(--color-secondary-rgb, 0, 0, 0), 0.1) 100%);
+  }
+
   .pet-card__header {
     display: flex;
     justify-content: space-between;

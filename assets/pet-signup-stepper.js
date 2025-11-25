@@ -11,6 +11,8 @@ export class PetSignupStepper extends Component {
     this.petName = '';
     this.petType = '';
     this.formData = {};
+    this.petImage = null; // Compressed blob
+    this.petImageDataUrl = null; // Data URL for preview
   }
 
   /**
@@ -19,7 +21,7 @@ export class PetSignupStepper extends Component {
    */
   get totalSteps() {
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
-    return isLoggedIn ? 7 : 8;
+    return isLoggedIn ? 8 : 9;
   }
 
   connectedCallback() {
@@ -168,7 +170,7 @@ export class PetSignupStepper extends Component {
       });
     }
 
-    // Authentication step buttons (Step 8 for non-logged-in users)
+    // Authentication step buttons (Step 9 for non-logged-in users)
     if (this.refs.createAccountButton) {
       this.refs.createAccountButton.addEventListener('click', () => {
         this.handleAuthenticationRedirect();
@@ -182,6 +184,32 @@ export class PetSignupStepper extends Component {
         this.saveFormDataToSession();
         const returnUrl = encodeURIComponent(window.location.pathname + '?pet_signup=true');
         window.location.href = `/account/login?return_url=${returnUrl}`;
+      });
+    }
+
+    // Image upload handlers
+    if (this.refs.imagePreviewWrapper) {
+      this.refs.imagePreviewWrapper.addEventListener('click', () => {
+        this.refs.imageInput?.click();
+      });
+    }
+
+    if (this.refs.imageInput) {
+      this.refs.imageInput.addEventListener('change', (e) => {
+        this.handleImageSelection(e);
+      });
+    }
+
+    if (this.refs.changeImageButton) {
+      this.refs.changeImageButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.refs.imageInput?.click();
+      });
+    }
+
+    if (this.refs.skipImageButton) {
+      this.refs.skipImageButton.addEventListener('click', () => {
+        this.nextStep();
       });
     }
   }
@@ -287,6 +315,11 @@ export class PetSignupStepper extends Component {
    * @returns {boolean} - Whether current step is valid
    */
   validateStep() {
+    // Step 2 (image upload) is optional - always valid
+    if (this.currentStep === 2) {
+      return true;
+    }
+
     const currentStepElement = this.refs.step?.[this.currentStep - 1];
     if (!currentStepElement) return false;
 
@@ -356,9 +389,9 @@ export class PetSignupStepper extends Component {
     // Update buttons
     this.updateButtons();
 
-    // Generate review summary on step 7 (review step)
+    // Generate review summary on step 8 (review step)
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
-    if (this.currentStep === 7) {
+    if (this.currentStep === 8) {
       this.generateReviewSummary();
     }
 
@@ -419,25 +452,139 @@ export class PetSignupStepper extends Component {
       this.refs.backButton.hidden = this.currentStep === 1;
     }
 
-    // For logged-in users: totalSteps = 7 (review is last step with submit)
-    // For non-logged-in users: totalSteps = 8 (step 7 = review with next, step 8 = auth with custom buttons)
+    // For logged-in users: totalSteps = 8 (review is last step with submit)
+    // For non-logged-in users: totalSteps = 9 (step 8 = review with next, step 9 = auth with custom buttons)
 
     if (isLoggedIn) {
-      // Logged in: Show submit on step 7 (review)
-      if (this.refs.nextButton) {
-        this.refs.nextButton.hidden = this.currentStep === 7;
-      }
-      if (this.refs.submitButton) {
-        this.refs.submitButton.hidden = this.currentStep !== 7;
-      }
-    } else {
-      // Not logged in: Show next through step 7, hide both on step 8 (custom buttons)
+      // Logged in: Show submit on step 8 (review)
       if (this.refs.nextButton) {
         this.refs.nextButton.hidden = this.currentStep === 8;
       }
       if (this.refs.submitButton) {
+        this.refs.submitButton.hidden = this.currentStep !== 8;
+      }
+    } else {
+      // Not logged in: Show next through step 8, hide both on step 9 (custom buttons)
+      if (this.refs.nextButton) {
+        this.refs.nextButton.hidden = this.currentStep === 9;
+      }
+      if (this.refs.submitButton) {
         this.refs.submitButton.hidden = true; // Never show submit for non-logged-in users
       }
+    }
+  }
+
+  /**
+   * Handle image file selection
+   */
+  async handleImageSelection(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      this.showError('Please select a valid image file (JPG, PNG, or WebP)');
+      return;
+    }
+
+    // Validate file size (max 5MB before compression)
+    if (file.size > 5 * 1024 * 1024) {
+      this.showError('Image file is too large. Please select an image under 5MB');
+      return;
+    }
+
+    try {
+      // Compress image
+      const { blob, dataUrl } = await this.compressImage(file);
+      this.petImage = blob;
+      this.petImageDataUrl = dataUrl;
+      this.showImagePreview(dataUrl);
+      this.hideMessages();
+    } catch (error) {
+      console.error('Failed to process image:', error);
+      this.showError('Failed to process image. Please try again.');
+    }
+  }
+
+  /**
+   * Compress image using Canvas API
+   */
+  async compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = new Image();
+
+        img.onload = () => {
+          // Calculate dimensions (max 800x800, maintain aspect ratio)
+          let width = img.width;
+          let height = img.height;
+          const maxSize = 800;
+
+          if (width > height && width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+
+          // Create canvas and compress
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert to blob at 85% quality
+          canvas.toBlob(
+            (blob) => {
+              const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+              resolve({ blob, dataUrl });
+            },
+            'image/jpeg',
+            0.85
+          );
+        };
+
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target.result;
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Show image preview
+   */
+  showImagePreview(dataUrl) {
+    if (this.refs.imagePreview && this.refs.imagePlaceholder && this.refs.changeImageButton) {
+      this.refs.imagePreview.src = dataUrl;
+      this.refs.imagePreview.hidden = false;
+      this.refs.imagePlaceholder.hidden = true;
+      this.refs.changeImageButton.hidden = false;
+    }
+  }
+
+  /**
+   * Reset image upload
+   */
+  resetImageUpload() {
+    this.petImage = null;
+    this.petImageDataUrl = null;
+
+    if (this.refs.imageInput) {
+      this.refs.imageInput.value = '';
+    }
+
+    if (this.refs.imagePreview && this.refs.imagePlaceholder && this.refs.changeImageButton) {
+      this.refs.imagePreview.hidden = true;
+      this.refs.imagePlaceholder.hidden = false;
+      this.refs.changeImageButton.hidden = true;
     }
   }
 
@@ -452,6 +599,16 @@ export class PetSignupStepper extends Component {
 
     // Build summary HTML
     let summaryHTML = '';
+
+    // Add image preview if available
+    if (this.petImageDataUrl) {
+      summaryHTML += `
+        <div class="review-summary__image">
+          <img src="${this.petImageDataUrl}" alt="Pet photo"
+               style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto var(--gap-md) auto; display: block;">
+        </div>
+      `;
+    }
 
     const fields = [
       { label: 'Pet Type', value: this.petType === 'dog' ? '🐕 Dog' : '🐱 Cat' },
@@ -538,8 +695,18 @@ export class PetSignupStepper extends Component {
       // Add pet type
       petData.type = this.petType;
 
+      // Create new FormData for submission
+      const submitFormData = new FormData();
+      submitFormData.append('customer_id', this.getAttribute('customer-id'));
+      submitFormData.append('pet_data', JSON.stringify(petData));
+
+      // Append image if available
+      if (this.petImage) {
+        submitFormData.append('pet_image', this.petImage, `${petData.name}-photo.jpg`);
+      }
+
       // Submit to Shopify
-      await this.submitPetData(petData);
+      await this.submitPetData(submitFormData);
 
       // Show success message
       this.showSuccess();
@@ -589,19 +756,14 @@ export class PetSignupStepper extends Component {
 
   /**
    * Submit pet data to Shopify metaobject
-   * @param {Object} petData
+   * @param {FormData} formData - FormData with customer_id, pet_data, and optional pet_image
    */
-  async submitPetData(petData) {
+  async submitPetData(formData) {
     // Check if customer is logged in using the attribute from Liquid
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
     const customerId = this.getAttribute('customer-id');
 
-    console.log('🚀 submitPetData called with:', {
-      isLoggedIn,
-      hasCustomerId: !!customerId,
-      customerIdLength: customerId ? customerId.length : 0,
-      petDataKeys: Object.keys(petData)
-    });
+    console.log('🚀 submitPetData called');
 
     if (!isLoggedIn) {
       console.error('❌ Login check failed:', {
@@ -621,34 +783,14 @@ export class PetSignupStepper extends Component {
       throw new Error('Customer ID is missing. Please refresh the page and try again.');
     }
 
-    const payload = {
-      customer_id: customerId,
-      pet_data: petData
-    };
-
     console.log('📦 Submitting pet data for customer:', customerId.substring(0, 30) + '...');
-    console.log('📦 Payload structure:', {
-      customer_id: customerId.substring(0, 30) + '...',
-      pet_data: {
-        name: petData.name,
-        type: petData.type,
-        hasBreed: !!petData.breed,
-        hasBirthday: !!petData.birthday,
-        weight: petData.weight,
-        allergiesCount: petData.allergies?.length || 0,
-        health_boost: petData.health_boost
-      }
-    });
 
     // Submit to Shopify app endpoint to create metaobject
     try {
       const response = await fetch('https://pet-profile-app.vercel.app/apps/pet-profile/create', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
+        // Don't set Content-Type - browser will add boundary for multipart
+        body: formData
       });
 
       if (response.ok) {
@@ -656,7 +798,9 @@ export class PetSignupStepper extends Component {
         console.log('✅ Pet profile saved to Shopify metaobject:', result);
 
         // Also save to localStorage as a cache
-        this.savePetToLocalStorage(petData, result.metaobject_id, customerId);
+        if (result.pet) {
+          this.savePetToLocalStorage(result.pet, result.metaobject_id, customerId);
+        }
 
         return result;
       } else {
@@ -810,6 +954,7 @@ export class PetSignupStepper extends Component {
       petType: this.petType,
       petName: this.petName,
       formData: petData,
+      imageDataUrl: this.petImageDataUrl, // Add this
       timestamp: Date.now(),
       currentStep: this.currentStep
     };
@@ -860,11 +1005,17 @@ export class PetSignupStepper extends Component {
   populateFormFields(savedData) {
     if (!savedData || !this.refs.form) return;
 
-    const { petType, petName, formData } = savedData;
+    const { petType, petName, formData, imageDataUrl } = savedData;
 
     // Set pet type and name
     this.petType = petType;
     this.petName = petName;
+
+    // Restore image if available
+    if (imageDataUrl) {
+      this.petImageDataUrl = imageDataUrl;
+      this.showImagePreview(imageDataUrl);
+    }
 
     // Populate form fields
     const form = this.refs.form;

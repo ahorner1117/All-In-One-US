@@ -179,3 +179,4 @@ This theme includes a custom **Pet Profile Form** section (`sections/pet-profile
 - Submits to `/apps/pet-profile/submit` endpoint (requires custom app or Shopify Functions)
 - Falls back to localStorage during development if API endpoint not available
 - Form data structure: `{ name, type, birthday, breed, weight, allergies[], healthBoost }`
+- mcp add https://shopify.dev/docs/apps/build/devmcp to use shopify mcp for app development

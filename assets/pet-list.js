@@ -124,8 +124,16 @@ export class PetList extends Component {
       this.refs.emptyState.hidden = true;
     }
 
+    // Ensure each pet has imageUrl field (even if empty)
+    const petsWithImages = this.pets.map(pet => ({
+      ...pet,
+      imageUrl: pet.imageUrl || pet.image_url || '' // Support both naming conventions
+    }));
+
+    console.log('🎨 Rendering pets with images:', petsWithImages.map(p => ({ name: p.name, hasImage: !!p.imageUrl, imageUrl: p.imageUrl })));
+
     if (this.refs.petGrid) {
-      this.refs.petGrid.innerHTML = this.pets.map(pet => this.createPetCard(pet)).join('');
+      this.refs.petGrid.innerHTML = petsWithImages.map(pet => this.createPetCard(pet)).join('');
       this.attachCardEventListeners();
     }
   }
@@ -149,6 +157,7 @@ export class PetList extends Component {
    */
   createPetCard(pet) {
     const typeIcon = pet.type === 'cat' ? '🐱' : '🐕';
+    const defaultPlaceholder = pet.type === 'cat' ? '🐱' : '🐕';
     const weightLabels = {
       'tiny': 'Tiny but mighty (<10lbs)',
       'medium': 'Perfect medium (25-50lbs)',
@@ -177,8 +186,32 @@ export class PetList extends Component {
       day: 'numeric'
     }) : '';
 
+    // Image rendering
+    let imageHtml = '';
+    const hasValidImage = pet.imageUrl && pet.imageUrl.trim() !== '';
+
+    console.log("Pet - ", pet)
+    if (hasValidImage) {
+      imageHtml = `
+        <div class="pet-card__image-container">
+          <img src="${this.escapeHtml(pet.imageUrl)}"
+               alt="${this.escapeHtml(pet.name)}"
+               class="pet-card__image"
+               loading="lazy"
+               onerror="console.error('Failed to load image for ${this.escapeHtml(pet.name)}:', '${this.escapeHtml(pet.imageUrl)}'); this.parentElement.innerHTML='<div class=\\"pet-card__placeholder-image\\">${defaultPlaceholder}</div>'">
+        </div>
+      `;
+    } else {
+      imageHtml = `
+        <div class="pet-card__image-container">
+          <div class="pet-card__placeholder-image">${defaultPlaceholder}</div>
+        </div>
+      `;
+    }
+
     return `
       <div class="pet-card" data-pet-id="${pet.id}">
+        ${imageHtml}
         <div class="pet-card__header">
           <h3 class="pet-card__name">
             <span class="pet-card__type-icon">${typeIcon}</span>

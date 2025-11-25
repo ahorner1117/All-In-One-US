@@ -135,8 +135,45 @@
             >
           </div>
 
-          <!-- Step 2: Birthday -->
+          <!-- Step 2: Pet Image -->
           <div class="form-step" data-step="2" ref="step[]" hidden>
+            <h3 class="form-step__title">Add a photo of [pet_name]</h3>
+            <p class="form-step__help">This helps us personalize their experience!</p>
+
+            <div class="image-upload-container">
+              <input
+                type="file"
+                name="pet_image"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                ref="imageInput"
+                class="image-upload__input"
+                hidden
+              >
+
+              <div class="image-upload__preview-wrapper" ref="imagePreviewWrapper">
+                <div class="image-upload__placeholder" ref="imagePlaceholder">
+                  <span class="image-upload__icon">📷</span>
+                  <span class="image-upload__text">Tap to add a photo</span>
+                </div>
+                <img ref="imagePreview" class="image-upload__preview" alt="Pet preview" hidden>
+                <button
+                  type="button"
+                  class="image-upload__change-button"
+                  ref="changeImageButton"
+                  hidden
+                >
+                  Change Photo
+                </button>
+              </div>
+
+              <button type="button" class="button button--secondary" ref="skipImageButton">
+                Skip for now
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Birthday -->
+          <div class="form-step" data-step="3" ref="step[]" hidden>
             <h3 class="form-step__title" ref="birthdayTitle">{{ section.settings.birthday_question }}</h3>
             <p class="form-step__help">{{ section.settings.birthday_help }}</p>
             <input
@@ -146,8 +183,8 @@
             >
           </div>
 
-          <!-- Step 3: Breed -->
-          <div class="form-step" data-step="3" ref="step[]" hidden>
+          <!-- Step 4: Breed -->
+          <div class="form-step" data-step="4" ref="step[]" hidden>
             <h3 class="form-step__title" ref="breedTitle">{{ section.settings.breed_question }}</h3>
             <p class="form-step__help">{{ section.settings.breed_help }}</p>
             <input
@@ -158,8 +195,8 @@
             >
           </div>
 
-          <!-- Step 4: Weight -->
-          <div class="form-step" data-step="4" ref="step[]" hidden>
+          <!-- Step 5: Weight -->
+          <div class="form-step" data-step="5" ref="step[]" hidden>
             <h3 class="form-step__title" ref="weightTitle">{{ section.settings.weight_question }}</h3>
             <div class="form-field__radio-group form-field__radio-group--weight" ref="dogWeightOptions">
               <label class="radio-card radio-card--weight">
@@ -195,8 +232,8 @@
             </div>
           </div>
 
-          <!-- Step 5: Allergies -->
-          <div class="form-step" data-step="5" ref="step[]" hidden>
+          <!-- Step 6: Allergies -->
+          <div class="form-step" data-step="6" ref="step[]" hidden>
             <h3 class="form-step__title" ref="allergiesTitle">{{ section.settings.allergies_question }}</h3>
             <p class="form-step__help">Select all that apply</p>
             <div class="form-field__checkbox-group">
@@ -231,8 +268,8 @@
             </div>
           </div>
 
-          <!-- Step 6: Health Boost -->
-          <div class="form-step" data-step="6" ref="step[]" hidden>
+          <!-- Step 7: Health Boost -->
+          <div class="form-step" data-step="7" ref="step[]" hidden>
             <h3 class="form-step__title" ref="boostTitle">{{ section.settings.boost_question }}</h3>
             <div class="form-field__radio-group form-field__radio-group--boost">
               <label class="radio-card radio-card--boost">
@@ -259,15 +296,15 @@
             </div>
           </div>
 
-          <!-- Step 7: Review -->
-          <div class="form-step form-step--review" data-step="7" ref="step[]" hidden>
+          <!-- Step 8: Review -->
+          <div class="form-step form-step--review" data-step="8" ref="step[]" hidden>
             <h3 class="form-step__title" ref="reviewTitle">{{ section.settings.review_title }}</h3>
             <p class="form-step__help">{{ section.settings.review_subtitle }}</p>
             <div class="review-summary" ref="reviewSummary"></div>
           </div>
 
-          <!-- Step 8: Authentication (Non-logged-in users only) -->
-          <div class="form-step form-step--auth" data-step="8" ref="step[]" hidden>
+          <!-- Step 9: Authentication (Non-logged-in users only) -->
+          <div class="form-step form-step--auth" data-step="9" ref="step[]" hidden>
             <div class="auth-step">
               <div class="auth-step__icon">🔐</div>
               <h3 class="form-step__title">{{ section.settings.auth_title | default: "Almost there! Let's create your account" }}</h3>
@@ -754,6 +791,84 @@
   .form-field__input:focus {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
+  }
+
+  /* Image Upload */
+  .image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  .image-upload__input {
+    display: none;
+  }
+
+  .image-upload__preview-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+  }
+
+  .image-upload__placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px dashed var(--color-input-border);
+    background-color: var(--color-input-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-sm);
+    transition: all 0.2s ease;
+  }
+
+  .image-upload__placeholder:hover {
+    border-color: var(--color-primary);
+    background-color: rgba(var(--color-primary-rgb, 0, 0, 0), 0.05);
+  }
+
+  .image-upload__icon {
+    font-size: 3rem;
+    opacity: 0.5;
+  }
+
+  .image-upload__text {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+  }
+
+  .image-upload__preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-primary);
+  }
+
+  .image-upload__change-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: var(--padding-xs) var(--padding-md);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .image-upload__change-button:hover {
+    opacity: 0.9;
+  }
+
+  .image-upload__skip {
+    width: 100%;
   }
 
   .form-field__radio-group {
