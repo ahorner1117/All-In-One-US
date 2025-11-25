@@ -6,27 +6,38 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "main-page",
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 100,
+        "padding-block-end": 0
+      }
+    },
+    "form": {
+      "type": "section",
       "blocks": {
-        "title": {
+        "text_x3UNRL": {
           "type": "text",
-          "name": "t:names.title",
+          "name": "t:names.heading",
           "settings": {
-            "text": "<h2>{{ closest.page.title }}</h2>",
-            "width": "100%",
+            "text": "<h2>CONTACT US</h2>",
+            "width": "fit-content",
             "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "color": "",
+            "color": "var(--color-foreground)",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -37,22 +48,22 @@
           },
           "blocks": {}
         },
-        "content": {
+        "text_NcYUpm": {
           "type": "text",
-          "name": "t:names.content",
+          "name": "t:names.text",
           "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
+            "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
             "type_preset": "rte",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "color": "",
+            "color": "var(--color-foreground)",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -62,23 +73,7 @@
             "padding-inline-end": 0
           },
           "blocks": {}
-        }
-      },
-      "block_order": [
-        "title",
-        "content"
-      ],
-      "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 0
-      }
-    },
-    "form": {
-      "type": "section",
-      "blocks": {
+        },
         "contact_form_UwiCkQ": {
           "type": "contact-form",
           "settings": {
@@ -112,6 +107,8 @@
         }
       },
       "block_order": [
+        "text_x3UNRL",
+        "text_NcYUpm",
         "contact_form_UwiCkQ"
       ],
       "name": "t:names.contact_form",
@@ -139,7 +136,7 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 32,
+        "padding-block-start": 60,
         "padding-block-end": 84
       }
     }

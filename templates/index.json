@@ -483,7 +483,7 @@
                       "name": "t:names.button",
                       "settings": {
                         "label": "Shop now",
-                        "link": "shopify://collections/all",
+                        "link": "shopify://pages/my-pets",
                         "open_in_new_tab": false,
                         "style_class": "button",
                         "width": "fit-content",

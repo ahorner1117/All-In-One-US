@@ -93,7 +93,7 @@
                 </div>
               {% endif %}
             </div>
-            <h3 class="pet-type-card__title">{{ section.settings.cat_title }}</h3>
+            <h4 class="pet-type-card__title">{{ section.settings.cat_title }}</h4>
             <p class="pet-type-card__description">{{ section.settings.cat_description }}</p>
           </button>
         </div>
@@ -576,7 +576,7 @@
 
   .pet-type-card:hover {
     border-color: var(--color-primary);
-    transform: translateY(-4px);
+/*     transform: translateY(-4px); */
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
@@ -610,9 +610,19 @@
 
   .pet-type-card__title {
     font-weight: 600;
-    color: var(--color-foreground);
+    /* color: var(--color-foreground); */
+    color:white;
+    background: black;
     font-size: 1.3rem;
     margin: 0;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 8px 18px;
+    margin: 0px 15%;
+  &:hover {
+    color:black;
+    background: white;
+  }
   }
 
   .pet-type-card__description {
