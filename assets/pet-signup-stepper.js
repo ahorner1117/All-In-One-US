@@ -695,6 +695,11 @@ export class PetSignupStepper extends Component {
       // Add pet type
       petData.type = this.petType;
 
+      // Add image_url when available
+      if (this.petImageDataUrl) {
+        petData.image_url = this.petImageDataUrl;
+      }
+
       // Create new FormData for submission
       const submitFormData = new FormData();
       submitFormData.append('customer_id', this.getAttribute('customer-id'));

@@ -124,13 +124,12 @@ export class PetList extends Component {
       this.refs.emptyState.hidden = true;
     }
 
-    // Ensure each pet has imageUrl field (even if empty)
     const petsWithImages = this.pets.map(pet => ({
       ...pet,
-      imageUrl: pet.imageUrl || pet.image_url || '' // Support both naming conventions
+      image_url: this.normalizeImageUrl(pet.image_url, pet)
     }));
 
-    console.log('🎨 Rendering pets with images:', petsWithImages.map(p => ({ name: p.name, hasImage: !!p.imageUrl, imageUrl: p.imageUrl })));
+    console.log('🎨 Rendering pets with images:', petsWithImages.map(p => ({ name: p.name, hasImage: !!p.image_url, image_url: p.image_url })));
 
     if (this.refs.petGrid) {
       this.refs.petGrid.innerHTML = petsWithImages.map(pet => this.createPetCard(pet)).join('');
@@ -188,17 +187,17 @@ export class PetList extends Component {
 
     // Image rendering
     let imageHtml = '';
-    const hasValidImage = pet.imageUrl && pet.imageUrl.trim() !== '';
+    const hasValidImage = pet.image_url && pet.image_url.trim() !== '';
 
     console.log("Pet - ", pet)
     if (hasValidImage) {
       imageHtml = `
         <div class="pet-card__image-container">
-          <img src="${this.escapeHtml(pet.imageUrl)}"
+          <img src="${this.escapeHtml(pet.image_url)}"
                alt="${this.escapeHtml(pet.name)}"
                class="pet-card__image"
                loading="lazy"
-               onerror="console.error('Failed to load image for ${this.escapeHtml(pet.name)}:', '${this.escapeHtml(pet.imageUrl)}'); this.parentElement.innerHTML='<div class=\\"pet-card__placeholder-image\\">${defaultPlaceholder}</div>'">
+               data-placeholder="${defaultPlaceholder}">
         </div>
       `;
     } else {
@@ -290,6 +289,21 @@ export class PetList extends Component {
     return div.innerHTML;
   }
 
+  normalizeImageUrl(imageValue) {
+    let url = imageValue;
+    if (!url) return '';
+    try {
+      const parsed = typeof url === 'string' ? JSON.parse(url) : url;
+      if (parsed && typeof parsed === 'object') {
+        if (parsed.dataUri) return parsed.dataUri;
+        const base64 = parsed.base64 || parsed.data || parsed.value;
+        const mime = parsed.mime || parsed.type || 'image/jpeg';
+        if (base64) return `data:${mime};base64,${base64}`;
+      }
+    } catch {}
+    return url;
+  }
+
   /**
    * Attach event listeners to card actions
    */
@@ -308,6 +322,19 @@ export class PetList extends Component {
         const petId = e.currentTarget.dataset.petId;
         this.handleDelete(petId);
       });
+    });
+    this.attachImageErrorHandlers();
+  }
+
+  attachImageErrorHandlers() {
+    this.querySelectorAll('.pet-card__image').forEach(img => {
+      img.addEventListener('error', () => {
+        const container = img.closest('.pet-card__image-container');
+        if (container) {
+          const ph = img.dataset.placeholder || '🐾';
+          container.innerHTML = `<div class="pet-card__placeholder-image">${ph}</div>`;
+        }
+      }, { once: true });
     });
   }
 

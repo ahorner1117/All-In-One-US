@@ -103,6 +103,11 @@ export class PetProfileCompletion extends Component {
     console.log('Pet data:', petData);
     console.log('Has image:', !!imageDataUrl);
 
+    // Include image_url in petData when available
+    if (imageDataUrl) {
+      petData.image_url = imageDataUrl;
+    }
+
     // If there's an image, convert to FormData for multipart upload
     if (imageDataUrl) {
       const formData = new FormData();
