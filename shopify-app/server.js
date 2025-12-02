@@ -392,9 +392,7 @@ async function fetchPetMetaobject(petId) {
     metaobject.fields.forEach(field => {
       if (field.key === 'allergies') {
         pet[field.key] = JSON.parse(field.value || '[]');
-      } else if (field.key === 'health_boost') {
-        pet.healthBoost = field.value;
-      } else {
+      } else if (field.key !== 'health_boost') {
         pet[field.key] = field.value;
       }
     });

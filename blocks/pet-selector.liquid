@@ -25,8 +25,7 @@
           "birthday": {{ pet.birthday.value | json }},
           "breed": {{ pet.breed.value | json }},
           "weight": {{ pet.weight.value | json }},
-          "allergies": {% if pet.allergies.value != blank %}{{ pet.allergies.value }}{% else %}[]{% endif %},
-          "health_boost": {{ pet.health_boost.value | json }}
+          "allergies": {% if pet.allergies.value != blank %}{{ pet.allergies.value }}{% else %}[]{% endif %}
         }{% unless forloop.last %},{% endunless %}
       {%- endfor -%}
     ]{% endcapture %}

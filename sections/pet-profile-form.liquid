@@ -174,35 +174,6 @@
           </div>
         </div>
 
-        <!-- Health Boost -->
-        <div class="form-field">
-          <label class="form-field__label" ref="boostLabel">
-            {{ section.settings.boost_question }}
-          </label>
-          <div class="form-field__radio-group form-field__radio-group--boost">
-            <label class="radio-card radio-card--boost">
-              <input type="radio" name="health_boost" value="joint_support" required>
-              <span class="radio-card__content">
-                <span class="radio-card__icon">🦴</span>
-                <span class="radio-card__label">Joint support</span>
-              </span>
-            </label>
-            <label class="radio-card radio-card--boost">
-              <input type="radio" name="health_boost" value="gut_health" required>
-              <span class="radio-card__content">
-                <span class="radio-card__icon">🌟</span>
-                <span class="radio-card__label">Gut health</span>
-              </span>
-            </label>
-            <label class="radio-card radio-card--boost">
-              <input type="radio" name="health_boost" value="probiotic" required>
-              <span class="radio-card__content">
-                <span class="radio-card__icon">💚</span>
-                <span class="radio-card__label">Pre + pro biotic</span>
-              </span>
-            </label>
-          </div>
-        </div>
 
         <button type="submit" class="button pet-profile-form__submit" ref="submitButton">
           {{ section.settings.submit_button_text }}
@@ -272,13 +243,7 @@
       "default": "Does [pet_name] have any protein allergies?",
       "info": "[pet_name] will be replaced with the pet's name"
     },
-    {
-      "type": "text",
-      "id": "boost_question",
-      "label": "Health Boost Question",
-      "default": "What kind of boost does [pet_name] need most?",
-      "info": "[pet_name] will be replaced with the pet's name"
-    },
+    
     {
       "type": "header",
       "content": "Form Settings"

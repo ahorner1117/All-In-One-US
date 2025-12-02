@@ -21,12 +21,13 @@ export class PetSignupStepper extends Component {
    */
   get totalSteps() {
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
-    return isLoggedIn ? 8 : 9;
+    return isLoggedIn ? 7 : 8;
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.setupEventListeners();
+    this.resetImageUpload();
 
     // Check if user returned from authentication
     this.handleAuthenticationReturn();
@@ -291,8 +292,8 @@ export class PetSignupStepper extends Component {
       { ref: 'birthdayTitle', original: null },
       { ref: 'breedTitle', original: null },
       { ref: 'weightTitle', original: null },
+      { ref: 'imageTitle', original: null },
       { ref: 'allergiesTitle', original: null },
-      { ref: 'boostTitle', original: null },
       { ref: 'reviewTitle', original: null }
     ];
 
@@ -391,7 +392,7 @@ export class PetSignupStepper extends Component {
 
     // Generate review summary on step 8 (review step)
     const isLoggedIn = this.getAttribute('customer-logged-in') === 'true';
-    if (this.currentStep === 8) {
+    if (this.currentStep === 7) {
       this.generateReviewSummary();
     }
 
@@ -456,20 +457,18 @@ export class PetSignupStepper extends Component {
     // For non-logged-in users: totalSteps = 9 (step 8 = review with next, step 9 = auth with custom buttons)
 
     if (isLoggedIn) {
-      // Logged in: Show submit on step 8 (review)
+      if (this.refs.nextButton) {
+        this.refs.nextButton.hidden = this.currentStep === 7;
+      }
+      if (this.refs.submitButton) {
+        this.refs.submitButton.hidden = this.currentStep !== 7;
+      }
+    } else {
       if (this.refs.nextButton) {
         this.refs.nextButton.hidden = this.currentStep === 8;
       }
       if (this.refs.submitButton) {
-        this.refs.submitButton.hidden = this.currentStep !== 8;
-      }
-    } else {
-      // Not logged in: Show next through step 8, hide both on step 9 (custom buttons)
-      if (this.refs.nextButton) {
-        this.refs.nextButton.hidden = this.currentStep === 9;
-      }
-      if (this.refs.submitButton) {
-        this.refs.submitButton.hidden = true; // Never show submit for non-logged-in users
+        this.refs.submitButton.hidden = true;
       }
     }
   }
@@ -564,9 +563,9 @@ export class PetSignupStepper extends Component {
   showImagePreview(dataUrl) {
     if (this.refs.imagePreview && this.refs.imagePlaceholder && this.refs.changeImageButton) {
       this.refs.imagePreview.src = dataUrl;
-      this.refs.imagePreview.hidden = false;
-      this.refs.imagePlaceholder.hidden = true;
-      this.refs.changeImageButton.hidden = false;
+      this.refs.imagePreview.classList.remove('is-hidden');
+      this.refs.imagePlaceholder.classList.add('is-hidden');
+      this.refs.changeImageButton.classList.remove('is-hidden');
     }
   }
 
@@ -582,9 +581,9 @@ export class PetSignupStepper extends Component {
     }
 
     if (this.refs.imagePreview && this.refs.imagePlaceholder && this.refs.changeImageButton) {
-      this.refs.imagePreview.hidden = true;
-      this.refs.imagePlaceholder.hidden = false;
-      this.refs.changeImageButton.hidden = true;
+      this.refs.imagePreview.classList.add('is-hidden');
+      this.refs.imagePlaceholder.classList.remove('is-hidden');
+      this.refs.changeImageButton.classList.add('is-hidden');
     }
   }
 
@@ -616,8 +615,7 @@ export class PetSignupStepper extends Component {
       { label: 'Birthday', value: data.birthday || 'Not provided' },
       { label: 'Breed', value: data.breed || 'Not provided' },
       { label: 'Weight', value: this.formatWeight(data.weight) },
-      { label: 'Allergies', value: data.allergies.length > 0 ? data.allergies.join(', ') : 'None' },
-      { label: 'Health Boost', value: this.formatHealthBoost(data.health_boost) }
+      { label: 'Allergies', value: data.allergies.length > 0 ? data.allergies.join(', ') : 'None' }
     ];
 
     fields.forEach(field => {
@@ -652,14 +650,7 @@ export class PetSignupStepper extends Component {
    * @param {string} boost
    * @returns {string}
    */
-  formatHealthBoost(boost) {
-    const boosts = {
-      'joint_support': '🦴 Joint support',
-      'gut_health': '🌟 Gut health',
-      'probiotic': '💚 Pre + pro biotic'
-    };
-    return boosts[boost] || boost;
-  }
+  
 
   /**
    * Scroll to top of stepper form
@@ -754,8 +745,7 @@ export class PetSignupStepper extends Component {
       birthday: formData.get('pet_birthday'),
       breed: formData.get('pet_breed'),
       weight: formData.get('pet_weight'),
-      allergies: allergies,
-      health_boost: formData.get('health_boost')
+      allergies: allergies
     };
   }
 
@@ -1052,10 +1042,7 @@ export class PetSignupStepper extends Component {
       });
     }
 
-    if (formData.health_boost) {
-      const boostInput = form.querySelector(`input[name="health_boost"][value="${formData.health_boost}"]`);
-      if (boostInput) boostInput.checked = true;
-    }
+    
 
     // Update weight options based on pet type
     this.updateWeightOptions(petType);

@@ -106,7 +106,7 @@
           <div class="stepper-progress__bar">
             <div class="stepper-progress__fill" ref="progressFill"></div>
           </div>
-          <p class="stepper-progress__text" ref="progressText">Step 1 of 7</p>
+          <p class="stepper-progress__text" ref="progressText">Step 1 of 6</p>
         </div>
 
         <!-- Success Message -->
@@ -137,7 +137,7 @@
 
           <!-- Step 2: Pet Image -->
           <div class="form-step" data-step="2" ref="step[]" hidden>
-            <h3 class="form-step__title">Add a photo of [pet_name]</h3>
+            <h3 class="form-step__title" ref="imageTitle">Add a photo of [pet_name]</h3>
             <p class="form-step__help">This helps us personalize their experience!</p>
 
             <div class="image-upload-container">
@@ -268,33 +268,6 @@
             </div>
           </div>
 
-          <!-- Step 7: Health Boost -->
-          <div class="form-step" data-step="7" ref="step[]" hidden>
-            <h3 class="form-step__title" ref="boostTitle">{{ section.settings.boost_question }}</h3>
-            <div class="form-field__radio-group form-field__radio-group--boost">
-              <label class="radio-card radio-card--boost">
-                <input type="radio" name="health_boost" value="joint_support">
-                <span class="radio-card__content">
-                  <span class="radio-card__icon">🦴</span>
-                  <span class="radio-card__label">Joint support</span>
-                </span>
-              </label>
-              <label class="radio-card radio-card--boost">
-                <input type="radio" name="health_boost" value="gut_health">
-                <span class="radio-card__content">
-                  <span class="radio-card__icon">🌟</span>
-                  <span class="radio-card__label">Gut health</span>
-                </span>
-              </label>
-              <label class="radio-card radio-card--boost">
-                <input type="radio" name="health_boost" value="probiotic">
-                <span class="radio-card__content">
-                  <span class="radio-card__icon">💚</span>
-                  <span class="radio-card__label">Pre + pro biotic</span>
-                </span>
-              </label>
-            </div>
-          </div>
 
           <!-- Step 8: Review -->
           <div class="form-step form-step--review" data-step="8" ref="step[]" hidden>
@@ -445,12 +418,6 @@
       "id": "allergies_question",
       "label": "Allergies Question",
       "default": "Does [pet_name] have any protein allergies?"
-    },
-    {
-      "type": "text",
-      "id": "boost_question",
-      "label": "Health Boost Question",
-      "default": "What kind of boost does [pet_name] need most?"
     },
     {
       "type": "text",
@@ -689,12 +656,12 @@
     margin-bottom: var(--gap-sm);
   }
 
-  .stepper-progress__fill {
-    height: 100%;
-    background-color: var(--color-primary);
-    transition: width 0.3s ease;
-    width: 14.28%; /* 1/7 steps */
-  }
+    .stepper-progress__fill {
+      height: 100%;
+      background-color: var(--color-primary);
+      transition: width 0.3s ease;
+      width: 16.66%;
+    }
 
   .stepper-progress__text {
     text-align: center;
@@ -810,9 +777,14 @@
     width: 200px;
     height: 200px;
     cursor: pointer;
+    overflow: hidden;
+    /* top: 0; */
   }
 
   .image-upload__placeholder {
+    position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -825,6 +797,12 @@
     gap: var(--gap-sm);
     transition: all 0.2s ease;
   }
+
+/*   .image-upload__placeholder[hidden],
+  .image-upload__preview[hidden],
+  .image-upload__change-button[hidden] {
+    display: none !important;
+  } */
 
   .image-upload__placeholder:hover {
     border-color: var(--color-primary);
@@ -842,6 +820,9 @@
   }
 
   .image-upload__preview {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -866,6 +847,13 @@
   .image-upload__change-button:hover {
     opacity: 0.9;
   }
+
+  /* Image upload overrides to ensure proper stacking and hiding */
+  .image-upload__preview-wrapper { margin: 0 auto; }
+  .image-upload__placeholder { position: absolute; top: 0; left: 0; z-index: 1; }
+  .image-upload__preview { position: absolute; top: 0; left: 0; z-index: 2; }
+  .image-upload__change-button { z-index: 3; }
+  .is-hidden { display: none !important; }
 
   .image-upload__skip {
     width: 100%;

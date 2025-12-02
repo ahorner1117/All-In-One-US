@@ -165,12 +165,6 @@ export class PetList extends Component {
     };
     const weightLabel = weightLabels[pet.weight] || pet.weight;
 
-    const boostLabels = {
-      'joint_support': '🦴 Joint support',
-      'gut_health': '🌟 Gut health',
-      'probiotic': '💚 Pre + pro biotic'
-    };
-    const boostLabel = boostLabels[pet.healthBoost] || pet.healthBoost;
 
     const allergyIcons = {
       'beef': '🥩',
@@ -268,11 +262,7 @@ export class PetList extends Component {
             `).join('') : ''
           }
 
-          ${pet.healthBoost ? `
-            <span class="pet-card__badge pet-card__badge--boost">
-              ${boostLabel}
-            </span>
-          ` : ''}
+          
         </div>
       </div>
     `;
