@@ -33,10 +33,10 @@
             "zoom": true,
             "video_loop": false,
             "hide_variants": true,
-            "padding-block-start": 24,
-            "padding-block-end": 48,
-            "padding-inline-start": 48,
-            "padding-inline-end": 48
+            "padding-block-start": 22,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -50,7 +50,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 28,
+            "gap": 14,
             "sticky_details_desktop": true,
             "inherit_color_scheme": true,
             "color_scheme": "scheme-1",
@@ -115,7 +115,7 @@
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h1",
+                    "type_preset": "h3",
                     "font": "var(--font-primary--family)",
                     "font_size": "",
                     "line_height": "normal",
@@ -213,26 +213,15 @@
               },
               "blocks": {}
             },
-            "subscriptions_app_block_7XYrd7": {
-              "type": "shopify://apps/subscriptions/blocks/app-block/a3bfe9ec-96f8-4508-a003-df608a36d2ad",
-              "settings": {
-                "color_text_body": "#6d7175",
-                "dividers_color": "#8f8d8d",
-                "bacgkround_color": "#ffffff",
-                "border_thickness": 1,
-                "border_radius": 0,
-                "subscription_policy_url": "",
-                "product": "{{closest.product}}"
-              }
-            },
             "pet_selector_PetSel": {
               "type": "pet-selector",
+              "disabled": true,
               "settings": {
                 "heading": "Who is this for?",
                 "description": "Select which pet this product is for",
                 "placeholder_text": "Select a pet...",
                 "required": false,
-                "hide_when_not_logged_in": true,
+                "hide_when_not_logged_in": false,
                 "no_pets_message": "Create a pet profile to personalize your order and ensure we send the perfect products for your furry friend!",
                 "add_pet_button_text": "Add Pet Profile",
                 "add_pet_url": "",
@@ -287,7 +276,6 @@
             "divider_VJhene",
             "text_aEtTtq",
             "variant_picker_R3rGDr",
-            "subscriptions_app_block_7XYrd7",
             "pet_selector_PetSel",
             "buy_buttons_eYQEYi"
           ]
@@ -301,7 +289,7 @@
         "gap": 48,
         "color_scheme": "scheme-3",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 24
       }
     },
     "product_recommendations_qggXJq": {
@@ -427,7 +415,7 @@
       ],
       "name": "t:names.product_recommendations",
       "settings": {
-        "product": "{{ product }}",
+        "product": "{{ closest.product }}",
         "recommendation_type": "related",
         "layout_type": "grid",
         "carousel_on_mobile": false,

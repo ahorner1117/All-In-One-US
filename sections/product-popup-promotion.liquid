@@ -1,0 +1,595 @@
+<script src="{{ 'product-popup-promotion.js' | asset_url }}" type="module"></script>
+
+<product-popup-promotion
+  class="product-popup-promotion"
+  data-show-delay="{{ section.settings.show_delay }}"
+  data-enabled="{{ section.settings.enable_popup }}"
+>
+  <div class="popup-overlay" ref="overlay">
+    <div
+      class="popup-modal image-ratio-{{ section.settings.image_ratio }} button-size-{{ section.settings.button_size }}"
+      ref="modal"
+      style="background-color: {{ section.settings.modal_background }};"
+    >
+      <button class="popup-close" ref="closeButton" aria-label="Minimize">
+        {{ 'icon-close.svg' | inline_asset_content }}
+      </button>
+
+      <div class="popup-content">
+        {% if section.settings.product != blank %}
+          <div class="popup-image">
+            {% if section.settings.product.featured_image %}
+              {{ section.settings.product.featured_image | image_url: width: 600 | image_tag:
+                loading: 'eager',
+                widths: '300, 400, 500, 600',
+                sizes: '(min-width: 750px) 500px, 90vw',
+                alt: section.settings.product.featured_image.alt | escape
+              }}
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="popup-details">
+          {% if section.settings.heading != blank %}
+            <h2 class="popup-heading">{{ section.settings.heading }}</h2>
+          {% endif %}
+
+          {% if section.settings.description != blank %}
+            <div class="popup-description">
+              {{ section.settings.description }}
+            </div>
+          {% endif %}
+
+          {% if section.settings.product != blank %}
+            <div class="popup-price">
+              <span class="price">{{ section.settings.product.price | money }}</span>
+              {% if section.settings.product.compare_at_price > section.settings.product.price %}
+                <span class="price--compare">{{ section.settings.product.compare_at_price | money }}</span>
+              {% endif %}
+            </div>
+
+            <div class="popup-actions">
+              {% if section.settings.show_cta_button and section.settings.button_text != blank %}
+                <a href="{{ section.settings.product.url }}" class="button button--primary">
+                  {{ section.settings.button_text }}
+                </a>
+              {% endif %}
+
+              {% if section.settings.show_buy_now %}
+                <product-form class="popup-product-form" data-product-id="{{ section.settings.product.id }}">
+                  <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="{{ section.settings.product.selected_or_first_available_variant.id }}">
+                    <button
+                      type="submit"
+                      name="add"
+                      class="button button--secondary"
+                      {% unless section.settings.product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                    >
+                      {% if section.settings.product.selected_or_first_available_variant.available %}
+                        {{ section.settings.buy_now_text | default: 'Add to Cart' }}
+                      {% else %}
+                        {{ 'products.product.sold_out' | t }}
+                      {% endif %}
+                    </button>
+                  </form>
+                </product-form>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Minimized button in bottom left {%- endcomment -%}
+  <button class="popup-minimized" ref="minimizedButton" aria-label="Open promotion">
+    {% if section.settings.product != blank and section.settings.product.featured_image %}
+      <div class="minimized-image">
+        {{ section.settings.product.featured_image | image_url: width: 100 | image_tag:
+          loading: 'lazy',
+          widths: '50, 100',
+          sizes: '50px',
+          alt: section.settings.product.featured_image.alt | escape
+        }}
+      </div>
+    {% endif %}
+    <div class="minimized-text">
+      <span class="minimized-title">{{ section.settings.minimized_text | default: 'Special Offer' }}</span>
+      {% if section.settings.show_price_in_minimized and section.settings.product != blank %}
+        <span class="minimized-price">{{ section.settings.product.price | money }}</span>
+      {% endif %}
+    </div>
+  </button>
+</product-popup-promotion>
+
+{% stylesheet %}
+  .product-popup-promotion {
+    display: none;
+  }
+
+  .product-popup-promotion.active {
+    display: block;
+  }
+
+  /* Popup overlay and modal */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out forwards;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .product-popup-promotion.minimized .popup-overlay {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .popup-modal {
+    position: relative;
+    border-radius: 1rem;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    animation: scaleIn 0.3s ease-in-out forwards;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .product-popup-promotion.minimized .popup-modal {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  @keyframes scaleIn {
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .popup-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s ease;
+  }
+
+  .popup-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .popup-close svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+  }
+
+  .popup-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .popup-content {
+      grid-template-columns: 1fr 1fr;
+      padding: 3rem;
+    }
+  }
+
+  /* Image ratio variations */
+  .popup-image {
+    width: 100%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .popup-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Square ratio - 1:1 */
+  .image-ratio-square .popup-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Portrait ratio - 3:4 */
+  .image-ratio-portrait .popup-image {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Landscape ratio - 4:3 */
+  .image-ratio-landscape .popup-image {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Wide ratio - 16:9 */
+  .image-ratio-wide .popup-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Auto - natural image ratio */
+  .image-ratio-auto .popup-image {
+    aspect-ratio: auto;
+  }
+
+  .image-ratio-auto .popup-image img {
+    height: auto;
+  }
+
+  .popup-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .popup-heading {
+    font-size: 2.4rem;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .popup-description {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  .popup-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .price--compare {
+    font-size: 1.6rem;
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  .popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  /* Button size variations */
+  .popup-actions .button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Small buttons */
+  .button-size-small .popup-actions .button {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  /* Medium buttons (default) */
+  .button-size-medium .popup-actions .button {
+    padding: 1.5rem 2rem;
+    font-size: 1.6rem;
+  }
+
+  /* Large buttons */
+  .button-size-large .popup-actions .button {
+    padding: 2rem 2.5rem;
+    font-size: 1.8rem;
+  }
+
+  .popup-product-form form {
+    width: 100%;
+  }
+
+  /* Minimized button */
+  .popup-minimized {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 5rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 998;
+    opacity: 0;
+    transform: translateY(100px);
+    pointer-events: none;
+  }
+
+  .product-popup-promotion.minimized .popup-minimized {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    animation: slideUp 0.3s ease-in-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .popup-minimized:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .minimized-image {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .minimized-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .minimized-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .minimized-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #000000;
+    white-space: nowrap;
+  }
+
+  .minimized-price {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  @media screen and (max-width: 749px) {
+    .popup-overlay {
+      padding: 1rem;
+    }
+
+    .popup-modal {
+      max-height: 95vh;
+    }
+
+    .popup-content {
+      padding: 1.5rem;
+    }
+
+    .popup-heading {
+      font-size: 2rem;
+    }
+
+    .popup-minimized {
+      bottom: 1rem;
+      left: 1rem;
+      padding: 0.8rem 1.2rem;
+    }
+
+    .minimized-image {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    .minimized-title {
+      font-size: 1.2rem;
+    }
+
+    .minimized-price {
+      font-size: 1.1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Popup Promotion",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_popup",
+      "label": "Enable popup",
+      "default": true
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "Modal Appearance"
+    },
+    {
+      "type": "color",
+      "id": "modal_background",
+      "label": "Modal background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Product image ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto (natural ratio)"
+        },
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "wide",
+          "label": "Wide (16:9)"
+        }
+      ],
+      "default": "square"
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Button size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Special Offer!"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Don't miss out on this amazing deal! Limited time offer.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_button",
+      "label": "Show CTA button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "View Product"
+    },
+    {
+      "type": "header",
+      "content": "Buy Now Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show buy now button",
+      "default": true,
+      "info": "Adds the product to cart directly"
+    },
+    {
+      "type": "text",
+      "id": "buy_now_text",
+      "label": "Buy now button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "header",
+      "content": "Minimized Button"
+    },
+    {
+      "type": "text",
+      "id": "minimized_text",
+      "label": "Minimized button text",
+      "default": "Special Offer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_in_minimized",
+      "label": "Show price in minimized button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Popup Settings"
+    },
+    {
+      "type": "range",
+      "id": "show_delay",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "label": "Show delay",
+      "default": 1,
+      "info": "Delay before popup appears on page load"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Popup Promotion"
+    }
+  ]
+}
+{% endschema %}

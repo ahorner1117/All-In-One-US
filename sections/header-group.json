@@ -19,8 +19,8 @@
           "settings": {
             "text": "RAISING THE STANDARD",
             "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.125rem",
             "weight": "",
             "letter_spacing": "normal",
             "case": "none"
@@ -62,9 +62,9 @@
           "settings": {
             "menu": "main-menu",
             "color_scheme": "",
-            "type_font_primary_size": "1.125rem",
-            "menu_font_style": "inverse_large",
-            "type_font_primary_link": "heading",
+            "type_font_primary_size": "0.875rem",
+            "menu_font_style": "inverse",
+            "type_font_primary_link": "accent",
             "type_case_primary_link": "uppercase",
             "menu_style": "featured_products",
             "featured_products_aspect_ratio": "4 / 5",

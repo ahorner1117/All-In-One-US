@@ -32,6 +32,10 @@
   {% endif %}
 {% endif %}
 
+{% comment %} Hide entire block if setting is enabled and customer is not logged in {% endcomment %}
+{% if block_settings.hide_when_not_logged_in and customer == blank %}
+  {% comment %} Block hidden - customer not logged in {% endcomment %}
+{% else %}
 <pet-selector
   class="pet-selector spacing-style"
   style="{% render 'spacing-style', settings: block_settings %}"
@@ -107,6 +111,7 @@
     </div>
   </div>
 </pet-selector>
+{% endif %}
 
 {% stylesheet %}
   .pet-selector {
@@ -251,6 +256,13 @@
       "label": "Required",
       "default": false,
       "info": "Require customers to select a pet before adding to cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_when_not_logged_in",
+      "label": "Hide when not logged in",
+      "default": false,
+      "info": "Hide this entire block when customer is not logged in (useful to avoid duplicate login prompts)"
     },
     {
       "type": "header",

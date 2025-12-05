@@ -63,6 +63,9 @@ export class PetProfileForm extends Component {
     if (!this.originalAllergiesText && this.refs.allergiesLabel) {
       this.originalAllergiesText = this.refs.allergiesLabel.textContent;
     }
+    if (!this.originalBoostText && this.refs.boostLabel) {
+      this.originalBoostText = this.refs.boostLabel.textContent;
+    }
 
     // Update weight question
     if (this.refs.weightLabel && this.originalWeightText) {
@@ -75,6 +78,9 @@ export class PetProfileForm extends Component {
     }
 
     // Update boost question
+    if (this.refs.boostLabel && this.originalBoostText) {
+      this.refs.boostLabel.textContent = this.originalBoostText.replace(/\[pet_name\]/g, this.petName);
+    }
   }
 
   /**
@@ -188,7 +194,8 @@ export class PetProfileForm extends Component {
       birthday: formData.get('pet_birthday'),
       breed: formData.get('pet_breed'),
       weight: formData.get('pet_weight'),
-      allergies: allergies
+      allergies: allergies,
+      health_boost: formData.get('health_boost')
     };
   }
 

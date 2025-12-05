@@ -41,7 +41,7 @@
   class="buy-buttons-block buy-buttons-block--{{ block.id }}"
   {{ block.shopify_attributes }}
 >
-  {% if customer %}
+  {% if customer or block_settings.allow_guest_purchase %}
     {%- if product != blank -%}
       {%- assign product_form_id = 'BuyButtons-ProductForm-' | append: section.id -%}
       <product-form-component
@@ -537,6 +537,13 @@
     {
       "type": "paragraph",
       "content": "t:content.resource_reference_product"
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_guest_purchase",
+      "label": "Allow guest checkout",
+      "info": "Enable customers to purchase without logging in",
+      "default": false
     },
     {
       "type": "checkbox",

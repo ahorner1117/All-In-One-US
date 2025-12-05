@@ -406,7 +406,7 @@
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h4",
+                    "type_preset": "h5",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -483,7 +483,7 @@
                       "name": "t:names.button",
                       "settings": {
                         "label": "Shop now",
-                        "link": "shopify://pages/my-pets",
+                        "link": "shopify://collections/frontpage",
                         "open_in_new_tab": false,
                         "style_class": "button",
                         "width": "fit-content",
@@ -593,7 +593,6 @@
         "breed_help": "This helps us customize their box even better",
         "weight_question": "How much does [pet_name] weigh?",
         "allergies_question": "Does [pet_name] have any protein allergies?",
-        "boost_question": "What kind of boost does [pet_name] need most?",
         "review_title": "Almost done! Let's review [pet_name]'s profile",
         "review_subtitle": "Make sure everything looks good before we create the profile",
         "auth_title": "Almost there! Let's create your account",
@@ -602,7 +601,7 @@
         "auth_signin_text": "Already have an account? Sign in",
         "submit_button_text": "Create Pet Profile",
         "success_message": "Pet profile created successfully!",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding-block-start": 60,
         "padding-block-end": 60
       }
@@ -613,21 +612,21 @@
         "image_JpYBXF": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/A703D6C7-CD77-4A76-8903-AE389F4D9CD5_1_105_c.jpg",
+            "image": "shopify://shop_images/lolo.jpg",
             "link": "",
             "image_ratio": "adapt",
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
+            "width": "custom",
+            "custom_width": 60,
+            "width_mobile": "custom",
             "custom_width_mobile": 100,
             "height": "fit",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
+            "padding-block-start": 49,
+            "padding-block-end": 51,
+            "padding-inline-start": 100,
             "padding-inline-end": 0
           },
           "blocks": {}
@@ -797,44 +796,11 @@
             "position": "CFO",
             "description": "<p>Tejas is our CFO. He is constantly running around building relationships and ensuring that we maintain our high standards and integrity for a successful business. He has brought on Kristen Suggs-Bohrer as his emotional support human. She never leaves his side and handles his high quality and stringent meals that ensure he gets the energy and supplements for peak performance. In his spare time he enjoys traveling to horse shows and watching his human compete. </p>"
           }
-        },
-        "team_member_HQnqLX": {
-          "type": "team_member",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/1406247F-3890-446F-AE89-5686FDB8C92F_1_201_a.jpg",
-            "name": "Toby",
-            "position": "Marketing Director",
-            "description": "<p>My name’s Toby, Paw In One’s Marketing Director (but most call me the Barketing Director). I’m in charge of all things social media — and I’ve appointed Tatum as my assistant to handle the important stuff: car rides, photoshoots, and the egg out of her breakfast sandwich</p>"
-          }
-        },
-        "team_member_kHJ4tL": {
-          "type": "team_member",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_1858.jpg",
-            "name": "Sabre",
-            "position": "Medical Director",
-            "description": "<p>Sabre here! I am the Medical Director at Paw In One. With a background as a Veterinary Technician I hand pick the best products that are both delicious and beneficial, with the help of my mom, Payton. My favorite past times are talking back and being tucked in every night. I may look big and scary but really I'm big hearted, and I prefer to spend my time with my tiny human. </p>"
-          }
-        },
-        "team_member_w8HBJ9": {
-          "type": "team_member",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_8237.png",
-            "name": "Bella",
-            "position": "Head of Security",
-            "description": "<p>Tank is our head of security. He takes pride in patrolling the perimeter, and meeting everyone that comes to our facility to ensure the safety of our team. Although he tends to take naps on the job he never misses the opportunity to get vocal with every small noise. He’s a lone wolf but a social butterfly. </p>"
-          }
         }
       },
       "block_order": [
         "team_member_tcNrMc",
-        "team_member_fq9dCP",
-        "team_member_HQnqLX",
-        "team_member_kHJ4tL",
-        "team_member_w8HBJ9"
+        "team_member_fq9dCP"
       ],
       "name": "Meet the Team",
       "settings": {
@@ -860,26 +826,6 @@
     "meet_the_team_hirDmX": {
       "type": "meet-the-team",
       "blocks": {
-        "team_member_nnnUm6": {
-          "type": "team_member",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_8229_a8fe8f5e-d0ac-4263-becd-30a4a704a06a.png",
-            "name": "Lola",
-            "position": "CEO",
-            "description": "<p>Lola is the CEO of PawPack, personally ensuring that every luxury pet box meets her high standards. This is her passion project, delivering luxury pet experiences around the globe while providing support to shelters and pet sanctuaries through volunteer work and donations from every subscription box. She’s brought on her human assistant, Josh Rojas, to handle daily tasks and logistics, along with the occasional belly rubs during her very busy schedule. </p>"
-          }
-        },
-        "team_member_WChBk6": {
-          "type": "team_member",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/IMG_6499_PNG.png",
-            "name": "Tejas",
-            "position": "CFO",
-            "description": "<p>Tejas is our CFO. He is constantly running around building relationships and ensuring that we maintain our high standards and integrity for a successful business. He has brought on Kristen Suggs-Bohrer as his emotional support human. She never leaves his side and handles his high quality and stringent meals that ensure he gets the energy and supplements for peak performance. In his spare time he enjoys traveling to horse shows and watching his human compete. </p>"
-          }
-        },
         "team_member_yD7Wg9": {
           "type": "team_member",
           "settings": {
@@ -893,7 +839,7 @@
           "type": "team_member",
           "settings": {
             "image": "shopify://shop_images/IMG_8237.png",
-            "name": "Bella",
+            "name": "Tank",
             "position": "Head of Security",
             "description": "<p>Tank is our head of security. He takes pride in patrolling the perimeter, and meeting everyone that comes to our facility to ensure the safety of our team. Although he tends to take naps on the job he never misses the opportunity to get vocal with every small noise. He’s a lone wolf but a social butterfly. </p>"
           }
@@ -909,8 +855,6 @@
         }
       },
       "block_order": [
-        "team_member_nnnUm6",
-        "team_member_WChBk6",
         "team_member_yD7Wg9",
         "team_member_kzDdK9",
         "team_member_Ak9exT"
@@ -934,6 +878,258 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
         "padding-block-end": 24
+      }
+    },
+    "companies_we_work_with_dFcg4W": {
+      "type": "companies-we-work-with",
+      "blocks": {
+        "company_wBKnr8": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/Durkha_Logo_002.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_mHQPfw": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/Poochie_logo.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_8XfCNj": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/logo-noest.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_z9Wa7M": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/sodapup_logo_with_made_in_USA_logo_V2B_360x_ca2b0365-a409-45bd-aee5-8c5b0650095f.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_3PaRjE": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/momentum-logo.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_iHdYdA": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/cocotherapylogo2_500x_483439f3-1313-4850-bfd5-494ae43c1898.webp",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_7XkjdK": {
+          "type": "company",
+          "settings": {
+            "image": "shopify://shop_images/canophera_logo.png",
+            "company_name": "",
+            "description": ""
+          }
+        },
+        "company_U949Ax": {
+          "type": "company",
+          "disabled": true,
+          "settings": {
+            "company_name": "Company Name",
+            "description": "<p>Add a description about this company partnership</p>"
+          }
+        },
+        "company_Gr4wK4": {
+          "type": "company",
+          "disabled": true,
+          "settings": {
+            "company_name": "Company Name",
+            "description": "<p>Add a description about this company partnership</p>"
+          }
+        }
+      },
+      "block_order": [
+        "company_wBKnr8",
+        "company_mHQPfw",
+        "company_8XfCNj",
+        "company_z9Wa7M",
+        "company_3PaRjE",
+        "company_iHdYdA",
+        "company_7XkjdK",
+        "company_U949Ax",
+        "company_Gr4wK4"
+      ],
+      "name": "Companies We Work With",
+      "settings": {
+        "heading": "Companies We Work With",
+        "subheading": "",
+        "heading_alignment": "center",
+        "layout_type": "carousel",
+        "carousel_on_mobile": true,
+        "columns": 4,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 24,
+        "rows_gap": 24,
+        "image_max_height": 200,
+        "icons_style": "arrow",
+        "icons_shape": "circle",
+        "section_width": "page-width",
+        "gap": 32,
+        "color_scheme": "scheme-3",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
+    "featured_blog_posts_Nty4VF": {
+      "type": "featured-blog-posts",
+      "blocks": {
+        "static-blog-title": {
+          "type": "_featured-blog-posts-title",
+          "name": "t:names.title",
+          "static": true,
+          "settings": {
+            "text": "<h3>{{ closest.blog.title }}</h3>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "static-blog-post-card": {
+          "type": "_featured-blog-posts-card",
+          "name": "t:names.blog_card",
+          "static": true,
+          "settings": {
+            "alignment": "left",
+            "gap": 8,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "image": {
+              "type": "_featured-blog-posts-image",
+              "static": true,
+              "settings": {
+                "image_ratio": "square",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0
+              },
+              "blocks": {}
+            },
+            "title": {
+              "type": "_heading",
+              "name": "t:names.title",
+              "static": true,
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "text": "<h4>{{ closest.article.title }}</h4>",
+                "read_only": false,
+                "alignment": "left",
+                "show_alignment": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "blog-post-info-text": {
+              "type": "_blog-post-info-text",
+              "name": "t:names.details",
+              "static": true,
+              "settings": {
+                "show_date": true,
+                "show_author": true,
+                "type_preset": "",
+                "alignment": "left",
+                "show_alignment": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "blog-post-description": {
+              "type": "_blog-post-description",
+              "name": "t:names.excerpt",
+              "static": true,
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "padding-block-start": 8,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
+      "disabled": true,
+      "name": "t:names.blog_posts_editorial",
+      "settings": {
+        "blog": "treat-your-pet-to-the-ultimate-holiday-surprise",
+        "layout_type": "editorial",
+        "carousel_on_mobile": false,
+        "post_limit": 2,
+        "columns": 3,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 16,
+        "rows_gap": 16,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "gap": 64,
+        "color_scheme": "",
+        "padding-block-start": 48,
+        "padding-block-end": 48
       }
     },
     "section_YHKNiE": {
@@ -1172,256 +1368,24 @@
         "padding-block-end": 0
       }
     },
-    "featured_blog_posts_Nty4VF": {
-      "type": "featured-blog-posts",
-      "blocks": {
-        "static-blog-title": {
-          "type": "_featured-blog-posts-title",
-          "name": "t:names.title",
-          "static": true,
-          "settings": {
-            "text": "<h3>{{ closest.blog.title }}</h3>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "static-blog-post-card": {
-          "type": "_featured-blog-posts-card",
-          "name": "t:names.blog_card",
-          "static": true,
-          "settings": {
-            "alignment": "left",
-            "gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image": {
-              "type": "_featured-blog-posts-image",
-              "static": true,
-              "settings": {
-                "image_ratio": "square",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            },
-            "title": {
-              "type": "_heading",
-              "name": "t:names.title",
-              "static": true,
-              "settings": {
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "text": "<h4>{{ closest.article.title }}</h4>",
-                "read_only": false,
-                "alignment": "left",
-                "show_alignment": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "blog-post-info-text": {
-              "type": "_blog-post-info-text",
-              "name": "t:names.details",
-              "static": true,
-              "settings": {
-                "show_date": true,
-                "show_author": true,
-                "type_preset": "",
-                "alignment": "left",
-                "show_alignment": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
-            "blog-post-description": {
-              "type": "_blog-post-description",
-              "name": "t:names.excerpt",
-              "static": true,
-              "settings": {
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 8,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        }
-      },
-      "disabled": true,
-      "name": "t:names.blog_posts_editorial",
+    "product_popup_promotion_ARFWPy": {
+      "type": "product-popup-promotion",
+      "name": "Product Popup Promotion",
       "settings": {
-        "blog": "treat-your-pet-to-the-ultimate-holiday-surprise",
-        "layout_type": "editorial",
-        "carousel_on_mobile": false,
-        "post_limit": 2,
-        "columns": 3,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 16,
-        "rows_gap": 16,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 64,
-        "color_scheme": "",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      }
-    },
-    "companies_we_work_with_dFcg4W": {
-      "type": "companies-we-work-with",
-      "blocks": {
-        "company_wBKnr8": {
-          "type": "company",
-          "settings": {
-            "image": "shopify://shop_images/Durkha_Logo_002.png",
-            "company_name": "",
-            "description": ""
-          }
-        },
-        "company_mHQPfw": {
-          "type": "company",
-          "settings": {
-            "image": "shopify://shop_images/Poochie_logo.png",
-            "company_name": "",
-            "description": ""
-          }
-        },
-        "company_8XfCNj": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Three",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_z9Wa7M": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Four",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_3PaRjE": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Name",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_iHdYdA": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Name",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_7XkjdK": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Name",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_U949Ax": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Name",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        },
-        "company_Gr4wK4": {
-          "type": "company",
-          "disabled": true,
-          "settings": {
-            "company_name": "Company Name",
-            "description": "<p>Add a description about this company partnership</p>"
-          }
-        }
-      },
-      "block_order": [
-        "company_wBKnr8",
-        "company_mHQPfw",
-        "company_8XfCNj",
-        "company_z9Wa7M",
-        "company_3PaRjE",
-        "company_iHdYdA",
-        "company_7XkjdK",
-        "company_U949Ax",
-        "company_Gr4wK4"
-      ],
-      "name": "Companies We Work With",
-      "settings": {
-        "heading": "Companies We Work With",
-        "subheading": "",
-        "heading_alignment": "center",
-        "layout_type": "carousel",
-        "carousel_on_mobile": true,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 24,
-        "rows_gap": 24,
-        "image_max_height": 200,
-        "icons_style": "arrow",
-        "icons_shape": "circle",
-        "section_width": "page-width",
-        "gap": 32,
-        "color_scheme": "scheme-3",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "enable_popup": true,
+        "product": "holday-special",
+        "modal_background": "#ffffff",
+        "image_ratio": "square",
+        "button_size": "medium",
+        "heading": "Limited Time Holiday Offer!",
+        "description": "<p>Don't miss out on this amazing deal! Limited time offer.</p>",
+        "show_cta_button": true,
+        "button_text": "View Product",
+        "show_buy_now": false,
+        "buy_now_text": "Add to Cart",
+        "minimized_text": "Limited Holiday Offer",
+        "show_price_in_minimized": true,
+        "show_delay": 1
       }
     }
   },
@@ -1433,8 +1397,9 @@
     "section_pcXFNb",
     "meet_the_team_gpmYyx",
     "meet_the_team_hirDmX",
-    "section_YHKNiE",
+    "companies_we_work_with_dFcg4W",
     "featured_blog_posts_Nty4VF",
-    "companies_we_work_with_dFcg4W"
+    "section_YHKNiE",
+    "product_popup_promotion_ARFWPy"
   ]
 }
